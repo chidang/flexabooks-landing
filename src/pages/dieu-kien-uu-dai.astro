@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { EARLY_BIRD, REFERRAL_MONTHS, REFUND_DAYS, SERVICE_FIRM, TERMS, TRIAL_DAYS } from '../data/pricing';
+import { SUPPORT_PHONE_DISPLAY, ZALO_CHAT_URL } from '../lib/contact';
+---
+<BaseLayout title="Điều kiện ưu đãi · FlexaBooks" description="Điều kiện áp dụng của dùng thử, giảm giá năm đầu, mua nhiều năm, giới thiệu, kế toán dịch vụ và hoàn tiền của FlexaBooks.">
+  <article class="prose mx-auto max-w-3xl px-4 py-14">
+    <h1 class="text-3xl font-bold tracking-tight text-ink">Điều kiện ưu đãi</h1>
+    <p>Áp dụng cho khách mua gói FlexaBooks trực tiếp. Giá và ưu đãi tính cho một công ty (một mã số thuế), chưa gồm thuế GTGT. Mỗi đơn hàng chọn được nhiều ưu đãi trừ khi mục dưới đây ghi khác.</p>
+
+    <h2>1. Dùng thử {TRIAL_DAYS} ngày</h2>
+    <ul>
+      <li>Dùng đủ tính năng của gói Chuyên nghiệp trong {TRIAL_DAYS} ngày kể từ ngày công ty được duyệt.</li>
+      <li>Không cần thẻ, không tự trừ tiền khi hết hạn.</li>
+      <li>Hết hạn dùng thử mà chưa mua thì dữ liệu được giữ nguyên, bạn vẫn đăng nhập để xem và xuất dữ liệu. Mua gói thì làm tiếp trên chính dữ liệu đó.</li>
+      <li>Mỗi mã số thuế được dùng thử một lần.</li>
+    </ul>
+
+    <h2>2. Giảm {EARLY_BIRD.percent}% năm đầu</h2>
+    <ul>
+      <li>Áp dụng cho đơn mua gói đầu tiên thanh toán trước hết ngày {EARLY_BIRD.deadline}.</li>
+      <li>Giảm trên giá của năm thứ nhất; mua nhiều năm thì các năm sau tính giá thường.</li>
+      <li>Không cộng với giảm giá của kế toán dịch vụ cho cùng một công ty.</li>
+    </ul>
+
+    <h2>3. Mua nhiều năm</h2>
+    <ul>
+      {TERMS.filter((t) => t.bonusMonths > 0).map((t) => (
+        <li>Trả trước {t.years} năm được dùng thêm {t.bonusMonths} tháng, tổng {t.years * 12 + t.bonusMonths} tháng.</li>
+      ))}
+      <li>Giá các năm đã trả được giữ nguyên dù bảng giá về sau tăng.</li>
+    </ul>
+
+    <h2>4. Giới thiệu khách hàng</h2>
+    <ul>
+      <li>Người được giới thiệu khai mã giới thiệu (email hoặc mã số thuế của người giới thiệu) khi mua gói lần đầu.</li>
+      <li>Sau khi người được giới thiệu thanh toán, mỗi bên được cộng {REFERRAL_MONTHS} tháng vào hạn dùng của công ty mình.</li>
+      <li>Không giới hạn số lần giới thiệu.</li>
+    </ul>
+
+    <h2>5. Kế toán dịch vụ</h2>
+    <ul>
+      <li>Áp dụng khi một tài khoản giữ sổ cho nhiều công ty và các công ty mua gói qua cùng một đơn vị.</li>
+      <li>Từ công ty thứ {SERVICE_FIRM.fromCompany} trở đi giảm {SERVICE_FIRM.percent}% giá gói của công ty đó.</li>
+    </ul>
+
+    <h2>6. Chuyển dữ liệu từ phần mềm cũ</h2>
+    <ul>
+      <li>Gói Doanh nghiệp: chúng tôi hướng dẫn xuất bảng số dư, sổ nhật ký chung và kiểm tra cùng bạn khi nhập.</li>
+      <li>Gói Chuyên nghiệp: bạn gửi tệp, chúng tôi nhập và đối chiếu số dư hộ bạn.</li>
+      <li>Phạm vi là dữ liệu của năm đang làm và số dư đầu năm đó.</li>
+    </ul>
+
+    <h2>7. Hoàn tiền</h2>
+    <ul>
+      <li>Trong {REFUND_DAYS} ngày kể từ ngày thanh toán lần đầu, bạn báo không muốn dùng tiếp thì được hoàn lại số tiền đã trả cho gói.</li>
+      <li>Phí Trợ lý AI đã dùng không hoàn lại, như Điều khoản sử dụng.</li>
+      <li>Áp dụng một lần cho mỗi mã số thuế.</li>
+    </ul>
+
+    <h2>Liên hệ</h2>
+    <p>Hỏi về ưu đãi: gọi <strong>{SUPPORT_PHONE_DISPLAY}</strong> hoặc nhắn <a href={ZALO_CHAT_URL} target="_blank" rel="noopener">Zalo</a>.</p>
+  </article>
+</BaseLayout>

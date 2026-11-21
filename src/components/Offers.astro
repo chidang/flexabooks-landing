@@ -1,0 +1,14 @@
+---
+import { OFFERS } from '../data/pricing';
+---
+<ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+  {OFFERS.map((o) => (
+    <li class="rounded-xl border border-line bg-surface p-5">
+      <p class="font-semibold text-ink">{o.title}</p>
+      <p class="mt-1.5 text-sm leading-relaxed text-ink-soft">{o.body}</p>
+    </li>
+  ))}
+</ul>
+<p class="mt-4 text-center text-sm text-muted">
+  Điều kiện chi tiết ở trang <a href="/dieu-kien-uu-dai" class="font-medium text-brand-600 underline underline-offset-2 dark:text-brand-300">Điều kiện ưu đãi</a>.
+</p>

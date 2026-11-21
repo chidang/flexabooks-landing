@@ -1,0 +1,157 @@
+---
+import '../styles/global.css';
+import Analytics from '@vercel/analytics/astro';
+import Logo from '../components/Logo.astro';
+import ThemeControl from '../components/ThemeControl.astro';
+import { DOCS_URL, LOGIN_URL, PRIVACY_URL, SUPPORT_PHONE, SUPPORT_PHONE_DISPLAY, TERMS_URL, ZALO_CHAT_URL, ZALO_GROUP_URL, registerUrl } from '../lib/contact';
+import { TRIAL_DAYS } from '../data/pricing';
+
+interface Props {
+  title: string;
+  description: string;
+  jsonLd?: object[];
+}
+const { title, description, jsonLd = [] } = Astro.props;
+const SITE_NAME = 'FlexaBooks';
+const fullTitle = title.includes(SITE_NAME) ? title : `${title} · ${SITE_NAME}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL('/og.png', Astro.site);
+
+const THEME_PRELOAD = `(function(){try{var m=localStorage.getItem('flexabooks-theme')||'auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();`;
+
+const nav = [
+  { href: '/#tinh-nang', label: 'Tính năng' },
+  { href: '/#tro-ly-ai', label: 'Trợ lý AI' },
+  { href: '/bang-gia', label: 'Bảng giá' },
+  { href: '/#cau-hoi', label: 'Hỏi đáp' },
+  { href: DOCS_URL, label: 'Hướng dẫn', external: true },
+];
+---
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content="vi_VN" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#6F4E37" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" />
+    <script is:inline set:html={THEME_PRELOAD} />
+    {jsonLd.map((data) => <script type="application/ld+json" set:html={JSON.stringify(data)} />)}
+    <Analytics />
+  </head>
+  <body class="min-h-screen pb-20 md:pb-0">
+    <a href="#noi-dung" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-brand-500 focus:px-3 focus:py-2 focus:text-white">Bỏ qua, tới nội dung</a>
+
+    <header class="sticky top-0 z-30 border-b border-line bg-surface/90 backdrop-blur">
+      <div class="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4">
+        <a href="/" aria-label="FlexaBooks, trang chủ"><Logo /></a>
+        <nav class="ml-6 hidden items-center gap-1 lg:flex" aria-label="Điều hướng chính">
+          {nav.map((n) => (
+            <a href={n.href} {...(n.external ? { target: '_blank', rel: 'noopener' } : {})}
+              class="rounded-lg px-3 py-2 text-sm font-medium text-ink-soft transition hover:bg-brand-50 hover:text-ink dark:hover:bg-brand-500/15">{n.label}</a>
+          ))}
+        </nav>
+        <div class="ml-auto flex items-center gap-2">
+          <div class="hidden md:block"><ThemeControl /></div>
+          <a href={LOGIN_URL} class="hidden h-9 items-center rounded-lg px-3 text-sm font-semibold text-ink-soft transition hover:text-ink sm:flex">Đăng nhập</a>
+          <a href={registerUrl('trial', 'header')} data-cta="header"
+            class="flex h-9 whitespace-nowrap items-center rounded-lg bg-brand-500 px-3.5 text-sm font-semibold text-white transition hover:bg-brand-600">
+            Dùng thử<span class="hidden sm:inline">&nbsp;miễn phí</span>
+          </a>
+          <button type="button" data-menu-toggle aria-expanded="false" aria-controls="menu-di-dong" aria-label="Mở menu"
+            class="grid h-9 w-9 place-items-center rounded-lg text-ink-soft hover:bg-canvas lg:hidden">
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
+          </button>
+        </div>
+      </div>
+      <div id="menu-di-dong" data-menu-panel hidden class="border-t border-line bg-surface px-4 py-3 lg:hidden">
+        <nav class="flex flex-col" aria-label="Điều hướng trên điện thoại">
+          {nav.map((n) => (
+            <a href={n.href} {...(n.external ? { target: '_blank', rel: 'noopener' } : {})}
+              class="rounded-lg px-2 py-2.5 font-medium text-ink-soft hover:bg-canvas">{n.label}</a>
+          ))}
+          <a href={LOGIN_URL} class="rounded-lg px-2 py-2.5 font-medium text-ink-soft hover:bg-canvas">Đăng nhập</a>
+        </nav>
+        <div class="mt-2 border-t border-line pt-3 md:hidden"><ThemeControl /></div>
+      </div>
+    </header>
+
+    <main id="noi-dung"><slot /></main>
+
+    <footer class="border-t border-line bg-surface">
+      <div class="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:grid-cols-2 lg:grid-cols-4">
+        <div>
+          <Logo />
+          <p class="mt-3 text-sm leading-relaxed text-muted">Phần mềm kế toán trên trình duyệt cho doanh nghiệp nhỏ và vừa, doanh nghiệp siêu nhỏ, hộ kinh doanh.</p>
+        </div>
+        <div>
+          <p class="font-semibold text-ink">Sản phẩm</p>
+          <ul class="mt-3 space-y-2 text-sm text-ink-soft">
+            <li><a class="hover:text-brand-600" href="/#tinh-nang">Tính năng</a></li>
+            <li><a class="hover:text-brand-600" href="/bang-gia">Bảng giá</a></li>
+            <li><a class="hover:text-brand-600" href="/dieu-kien-uu-dai">Điều kiện ưu đãi</a></li>
+            <li><a class="hover:text-brand-600" href={DOCS_URL} target="_blank" rel="noopener">Hướng dẫn sử dụng</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="font-semibold text-ink">Hỗ trợ</p>
+          <ul class="mt-3 space-y-2 text-sm text-ink-soft">
+            <li><a class="hover:text-brand-600" href={`tel:${SUPPORT_PHONE}`}>Điện thoại {SUPPORT_PHONE_DISPLAY}</a></li>
+            <li><a class="hover:text-brand-600" href={ZALO_CHAT_URL} target="_blank" rel="noopener">Nhắn Zalo</a></li>
+            <li><a class="hover:text-brand-600" href={ZALO_GROUP_URL} target="_blank" rel="noopener">Nhóm Zalo người dùng</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="font-semibold text-ink">Pháp lý</p>
+          <ul class="mt-3 space-y-2 text-sm text-ink-soft">
+            <li><a class="hover:text-brand-600" href={PRIVACY_URL} target="_blank" rel="noopener">Bảo vệ dữ liệu cá nhân</a></li>
+            <li><a class="hover:text-brand-600" href={TERMS_URL} target="_blank" rel="noopener">Điều khoản sử dụng</a></li>
+          </ul>
+          <div class="mt-5"><ThemeControl /></div>
+        </div>
+      </div>
+      <p class="border-t border-line px-4 py-5 text-center text-xs text-muted">© {new Date().getFullYear()} FlexaBooks. Giá chưa gồm thuế GTGT.</p>
+    </footer>
+
+    <!-- Nút dùng thử dính đáy màn hình trên điện thoại -->
+    <div class="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-surface/95 p-3 backdrop-blur md:hidden">
+      <a href={registerUrl('trial', 'mobile-bar')} data-cta="mobile-bar"
+        class="flex h-12 items-center justify-center rounded-xl bg-brand-500 font-semibold text-white">
+        Dùng thử {TRIAL_DAYS} ngày, không cần thẻ
+      </a>
+    </div>
+
+    <script>
+      import { track } from '@vercel/analytics';
+      const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+      const panel = document.querySelector<HTMLElement>('[data-menu-panel]');
+      toggle?.addEventListener('click', () => {
+        const open = toggle.getAttribute('aria-expanded') !== 'true';
+        toggle.setAttribute('aria-expanded', String(open));
+        if (panel) panel.hidden = !open;
+      });
+      panel?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => {
+        toggle?.setAttribute('aria-expanded', 'false');
+        panel.hidden = true;
+      }));
+      document.addEventListener('click', (e) => {
+        const el = (e.target as HTMLElement).closest<HTMLAnchorElement>('[data-cta]');
+        if (el) track('cta_click', { placement: el.dataset.cta || '', plan: new URL(el.href).searchParams.get('plan') || '' });
+      });
+    </script>
+  </body>
+</html>

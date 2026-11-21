@@ -1,0 +1,86 @@
+---
+// Ba thẻ giá với công tắc kỳ hạn 1, 2, 3 năm. Mọi số tính sẵn lúc build và gắn vào data-*;
+// script chỉ đổi chữ hiển thị nên không có JS thì vẫn đọc được giá 1 năm.
+import { EARLY_BIRD, PLANS, TERMS, formatVnd, monthlyPrice } from '../data/pricing';
+import { registerUrl } from '../lib/contact';
+
+interface Props { placement?: string }
+const { placement = 'pricing' } = Astro.props;
+
+const check = 'M5 12.5l4.5 4.5L19 7.5';
+---
+<div data-pricing>
+  <div class="flex flex-col items-center gap-3">
+    <div class="inline-flex rounded-full border border-line bg-surface p-1" role="radiogroup" aria-label="Kỳ hạn">
+      {TERMS.map((t, i) => (
+        <button type="button" role="radio" aria-checked={i === 0 ? 'true' : 'false'} data-term={i}
+          class="rounded-full px-4 py-1.5 text-sm font-semibold text-ink-soft transition aria-checked:bg-brand-500 aria-checked:text-white">
+          {t.label}{t.bonusMonths > 0 && <span class="ml-1 font-normal opacity-80">+{t.bonusMonths} tháng</span>}
+        </button>
+      ))}
+    </div>
+    <p class="text-center text-sm text-muted">
+      Khách mua trước {EARLY_BIRD.deadline} được giảm thêm {EARLY_BIRD.percent}% năm đầu.
+    </p>
+  </div>
+
+  <div class="mt-8 grid gap-6 lg:grid-cols-3">
+    {PLANS.map((p) => {
+      const totals = TERMS.map((t) => formatVnd(p.pricePerYear * t.years));
+      const monthly = TERMS.map((t) => formatVnd(monthlyPrice(p, t.years, t.bonusMonths)));
+      const notes = TERMS.map((t) => t.bonusMonths ? `cho ${t.years} năm, dùng ${t.years * 12 + t.bonusMonths} tháng` : 'mỗi năm, mỗi công ty');
+      return (
+        <article id={p.id} class={`scroll-mt-24 relative flex flex-col rounded-2xl border bg-surface p-6 ${p.featured ? 'border-brand-500 shadow-[0_20px_50px_-24px_rgb(71_49_31/0.45)] ring-1 ring-brand-500' : 'border-line'}`}>
+          {p.featured && <span class="absolute -top-3 left-6 rounded-full bg-brand-500 px-3 py-1 text-xs font-semibold text-white">Nhiều người chọn</span>}
+          <h3 class="text-lg font-bold text-ink">{p.name}</h3>
+          <p class="mt-1 min-h-10 text-sm text-muted">{p.tagline}</p>
+
+          <p class="mt-5 flex items-baseline gap-1.5">
+            <span class="text-3xl font-bold tracking-tight text-ink" data-total={JSON.stringify(totals)}>{totals[0]}</span>
+          </p>
+          <p class="text-sm text-muted" data-note={JSON.stringify(notes)}>{notes[0]}</p>
+          <p class="mt-1 text-sm font-medium text-accent">Chỉ khoảng <span data-monthly={JSON.stringify(monthly)}>{monthly[0]}</span> mỗi tháng</p>
+
+          <a href={registerUrl(p.id, placement)} data-cta={placement}
+            class={`mt-6 flex h-11 items-center justify-center rounded-xl font-semibold transition ${p.featured ? 'bg-brand-500 text-white hover:bg-brand-600' : 'border border-brand-500 text-brand-600 hover:bg-brand-50 dark:text-brand-300 dark:hover:bg-brand-500/15'}`}>
+            Dùng thử 30 ngày
+          </a>
+
+          <dl class="mt-6 space-y-2 border-t border-line pt-5 text-sm">
+            <div class="flex justify-between gap-3"><dt class="text-muted">Người dùng</dt><dd class="font-semibold text-ink">{p.users}</dd></div>
+            <div class="flex justify-between gap-3"><dt class="text-muted">Trợ lý AI</dt><dd class="font-semibold text-ink">{p.aiQuestions} lượt hỏi/tháng</dd></div>
+            <div class="flex justify-between gap-3"><dt class="text-muted">Số chứng từ</dt><dd class="font-semibold text-ink">Không giới hạn</dd></div>
+          </dl>
+
+          <p class="mt-5 text-xs font-semibold uppercase tracking-wider text-muted">Dành cho</p>
+          <p class="mt-1 text-sm text-ink-soft">{p.audience}</p>
+
+          <ul class="mt-5 space-y-2.5 text-sm text-ink-soft">
+            {p.includes.map((item) => (
+              <li class="flex gap-2.5">
+                <svg viewBox="0 0 24 24" class="mt-0.5 h-4 w-4 flex-none text-brand-500 dark:text-brand-300" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={check} /></svg>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+          <p class="mt-auto pt-6 text-xs text-muted">{p.support}</p>
+        </article>
+      );
+    })}
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-pricing]').forEach((root) => {
+    const buttons = root.querySelectorAll<HTMLButtonElement>('[data-term]');
+    buttons.forEach((b) => b.addEventListener('click', () => {
+      const i = Number(b.dataset.term);
+      buttons.forEach((x) => x.setAttribute('aria-checked', String(x === b)));
+      for (const key of ['total', 'note', 'monthly']) {
+        root.querySelectorAll<HTMLElement>(`[data-${key}]`).forEach((el) => {
+          el.textContent = JSON.parse(el.dataset[key] || '[]')[i] ?? el.textContent;
+        });
+      }
+    }));
+  });
+</script>

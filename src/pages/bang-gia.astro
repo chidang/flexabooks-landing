@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import PricingCards from '../components/PricingCards.astro';
+import Offers from '../components/Offers.astro';
+import Faq from '../components/Faq.astro';
+import { ALL_PLANS_INCLUDE, PLANS, TRIAL_DAYS, formatVnd } from '../data/pricing';
+import { faqJsonLd, softwareJsonLd } from '../lib/jsonld';
+
+const site = Astro.site!;
+const yes = '✓';
+const no = '–';
+// Bảng so ngắn: các gói khác nhau ở loại hình, số người dùng, Trợ lý AI và mức hỗ trợ.
+const rows: { label: string; values: string[] }[] = [
+  { label: 'Giá mỗi năm', values: PLANS.map((p) => formatVnd(p.pricePerYear)) },
+  { label: 'Người dùng', values: PLANS.map((p) => String(p.users)) },
+  { label: 'Trợ lý AI mỗi tháng', values: PLANS.map((p) => `${p.aiQuestions} lượt hỏi`) },
+  { label: 'Hộ kinh doanh (TT152/2025)', values: [yes, yes, yes] },
+  { label: 'DN siêu nhỏ (TT58/2026)', values: [yes, yes, yes] },
+  { label: 'DN theo TT133, TT99', values: [no, yes, yes] },
+  { label: 'Quỹ, ngân hàng, hóa đơn, kho', values: [yes, yes, yes] },
+  { label: 'Mua bán, công nợ, đơn hàng, hợp đồng', values: [yes, yes, yes] },
+  { label: 'CCDC, TSCĐ, tiền lương, thuế TNCN', values: [no, yes, yes] },
+  { label: 'Sổ S1 đến S4d, B01, B02-DNSN', values: [yes, yes, yes] },
+  { label: 'Tờ khai 01/GTGT theo tháng, quý', values: [yes, yes, yes] },
+  { label: 'BCTC theo TT133, TT99; tờ khai 03/TNDN', values: [no, yes, yes] },
+  { label: 'Ngoại tệ, đánh giá lại tỷ giá', values: [no, yes, yes] },
+  { label: 'Giá thành sản xuất, công trình', values: [no, no, yes] },
+  { label: 'Rà soát số liệu, nhập sổ từ phần mềm khác', values: [no, no, yes] },
+  { label: 'Chuyển dữ liệu từ phần mềm cũ', values: [no, 'Miễn phí', 'Làm hộ bạn'] },
+  { label: 'Hỗ trợ', values: ['Zalo', 'Zalo, điện thoại, 1:1', 'Ưu tiên'] },
+];
+---
+<BaseLayout
+  title="Bảng giá FlexaBooks · Từ 1.000.000đ mỗi năm"
+  description={`Ba gói năm cho một công ty: 1.000.000đ, 1.500.000đ, 2.000.000đ. Không phí khởi tạo, không giới hạn chứng từ, dùng thử ${TRIAL_DAYS} ngày đủ tính năng.`}
+  jsonLd={[softwareJsonLd(site), faqJsonLd()]}
+>
+  <Section eyebrow="Bảng giá" title="Giá năm, cho một công ty" lead={`Dùng thử ${TRIAL_DAYS} ngày đủ tính năng rồi mới chọn gói. Giá chưa gồm thuế GTGT. Không phí khởi tạo, không giới hạn số chứng từ.`}>
+    <PricingCards placement="pricing-page" />
+  </Section>
+
+  <Section title="So sánh các gói" class="bg-surface">
+    <div class="-mx-4 overflow-x-auto px-4">
+      <table class="w-full min-w-[40rem] border-collapse text-sm">
+        <thead>
+          <tr class="border-b border-line text-left">
+            <th class="py-3 pr-4 font-semibold text-muted" scope="col">Hạng mục</th>
+            {PLANS.map((p) => <th class={`px-3 py-3 text-center font-bold ${p.featured ? 'text-brand-600 dark:text-brand-300' : 'text-ink'}`} scope="col">{p.name}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr class="border-b border-line">
+              <th class="py-3 pr-4 text-left font-medium text-ink-soft" scope="row">{r.label}</th>
+              {r.values.map((v) => <td class={`px-3 py-3 text-center ${v === yes ? 'font-bold text-accent' : v === no ? 'text-muted' : 'text-ink'}`}>{v}</td>)}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="mt-3 text-sm text-muted">Bảng cuộn ngang trên điện thoại. Lượt hỏi Trợ lý AI là số ước tính, tùy độ dài câu hỏi.</p>
+
+    <div class="mt-12 rounded-2xl border border-line bg-canvas p-6">
+      <h3 class="text-center font-bold text-ink">Gói nào cũng có</h3>
+      <ul class="mt-4 grid gap-x-6 gap-y-2 text-sm text-ink-soft sm:grid-cols-2 lg:grid-cols-4">
+        {ALL_PLANS_INCLUDE.map((x) => <li class="flex gap-2"><span class="text-accent">✓</span>{x}</li>)}
+      </ul>
+    </div>
+  </Section>
+
+  <Section eyebrow="Ưu đãi" title="Ưu đãi cho khách hàng mới">
+    <Offers />
+  </Section>
+
+  <Section id="cau-hoi" eyebrow="Hỏi đáp" title="Câu hỏi về giá và thanh toán" class="bg-surface">
+    <Faq />
+  </Section>
+</BaseLayout>

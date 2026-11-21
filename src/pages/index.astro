@@ -1,0 +1,267 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BrowserFrame from '../components/BrowserFrame.astro';
+import Section from '../components/Section.astro';
+import PricingCards from '../components/PricingCards.astro';
+import Offers from '../components/Offers.astro';
+import Faq from '../components/Faq.astro';
+import { ALL_PLANS_INCLUDE, TRIAL_DAYS, PLANS, formatVnd } from '../data/pricing';
+import { DOCS_URL, registerUrl } from '../lib/contact';
+import { faqJsonLd, softwareJsonLd } from '../lib/jsonld';
+
+import tongQuan from '../assets/screens/tong-quan.png';
+import saoKe from '../assets/screens/sao-ke.png';
+import hoaDon from '../assets/screens/hoa-don.png';
+import kho from '../assets/screens/kho.png';
+import khauHao from '../assets/screens/khau-hao.png';
+import soMau from '../assets/screens/so-mau.png';
+import hoKinhDoanh from '../assets/screens/ho-kinh-doanh.png';
+import raSoat from '../assets/screens/ra-soat.png';
+import troLy from '../assets/screens/tro-ly-ai.png';
+
+const site = Astro.site!;
+const cheapest = formatVnd(Math.min(...PLANS.map((p) => p.pricePerYear)));
+
+const trust = [
+  'Thông tư 133/2016', 'Thông tư 99/2025', 'Thông tư 58/2026', 'Thông tư 152/2025',
+  'Chạy trên trình duyệt', 'Không phí khởi tạo',
+];
+
+const segments = [
+  {
+    title: 'Hộ, cá nhân kinh doanh',
+    body: 'Ghi tiền vào, tiền ra như sổ tay. Phần mềm tự lập chứng từ, lên sổ S1a đến S3a và tính thuế theo kỳ.',
+    plan: 'ho-sieu-nho', planName: 'Hộ & Siêu nhỏ',
+  },
+  {
+    title: 'Doanh nghiệp nhỏ và vừa',
+    body: 'Đủ quỹ, ngân hàng, mua bán, kho, tài sản, tiền lương; báo cáo tài chính và tờ khai theo TT133 hoặc TT99.',
+    plan: 'doanh-nghiep', planName: 'Doanh nghiệp',
+  },
+  {
+    title: 'Sản xuất, xây lắp, kế toán dịch vụ',
+    body: 'Giá thành theo đối tượng, lệnh sản xuất, công trình. Một tài khoản giữ sổ nhiều công ty.',
+    plan: 'chuyen-nghiep', planName: 'Chuyên nghiệp',
+  },
+];
+
+const features = [
+  {
+    img: saoKe, alt: 'Màn chuyển sao kê ngân hàng sang tệp nhập',
+    title: 'Tiền mặt, ngân hàng, công nợ',
+    body: 'Lập phiếu thu, phiếu chi, ủy nhiệm chi. Tải sao kê Excel hay CSV của ngân hàng lên, phần mềm nhận ra cột ngày, cột tiền rồi cho xem trước khi nhập. Đối trừ chứng từ, theo dõi nợ quá hạn theo từng khách hàng, nhà cung cấp.',
+    points: ['Nhập sao kê theo khuôn của từng ngân hàng', 'Kiểm kê quỹ, cả quỹ ngoại tệ', 'Tuổi nợ, hạn thanh toán'],
+  },
+  {
+    img: hoaDon, alt: 'Danh sách hóa đơn mua vào với nút nhập XML và đọc từ PDF',
+    title: 'Hóa đơn điện tử',
+    body: 'Nhập hóa đơn từ tệp XML, hoặc thả tệp PDF, ảnh chụp để Trợ lý AI đọc và điền sẵn form. Từ hóa đơn tạo chứng từ hạch toán nháp, bạn xem lại rồi ghi sổ.',
+    points: ['Nhập XML hàng loạt', 'Đọc hóa đơn PDF, ảnh', 'Hóa đơn ngoại tệ đúng tỷ giá'],
+  },
+  {
+    img: kho, alt: 'Báo cáo tổng hợp tồn kho theo kho và vật tư',
+    title: 'Kho và giá xuất',
+    body: 'Nhập, xuất, chuyển kho, kiểm kê. Chọn cách tính giá xuất: bình quân tức thời, bình quân cuối kỳ, nhập trước xuất trước hoặc đích danh. Theo dõi tồn theo lô, sê-ri, hạn dùng khi cần.',
+    points: ['Đơn vị tính chuyển đổi', 'Tính lại giá xuất từ một ngày', 'Sổ chi tiết vật tư'],
+  },
+  {
+    img: khauHao, alt: 'Màn tính khấu hao tài sản cố định hằng tháng',
+    title: 'Tài sản cố định, công cụ dụng cụ, tiền lương',
+    body: 'Khấu hao và phân bổ chạy mỗi tháng một lần bấm. Bảng lương tính bảo hiểm, thuế TNCN; cuối quý có số liệu cho tờ khai 05/KK-TNCN, cuối năm có quyết toán.',
+    points: ['Sổ tài sản, sổ CCDC theo mẫu', 'Đối chiếu hao mòn', 'Thuế TNCN khấu trừ'],
+  },
+  {
+    img: soMau, alt: 'Sổ chi tiết bán hàng in theo mẫu S16-DNN',
+    title: 'Sổ, báo cáo tài chính, tờ khai',
+    body: 'Sổ in đúng mẫu của thông tư, có chữ ký. Báo cáo tài chính B01 đến B09, tờ khai 01/GTGT theo tháng hoặc quý, 03/TNDN. Cuối kỳ có kết chuyển lãi lỗ, khóa sổ, chốt năm.',
+    points: ['Xuất Excel mọi báo cáo', 'Kỳ khai thuế tháng hoặc quý', 'Năm tài chính không theo năm dương lịch'],
+  },
+  {
+    img: raSoat, alt: 'Danh sách lỗi của lần rà soát số liệu',
+    title: 'Rà soát số liệu của kế toán cũ',
+    body: 'Nhận sổ từ người khác? Phần mềm quét sổ, chỉ ra bước cuối kỳ chưa làm, dòng thiếu đối tượng, số dư bất thường, rồi gợi ý cách sửa theo đúng năm phát sinh sai sót.',
+    points: ['Chạy không cần AI', 'Biên bản rà soát in được', 'Nhập sổ nhật ký chung từ phần mềm khác'],
+  },
+];
+
+const moreFeatures = [
+  'Báo giá, đơn đặt hàng, hợp đồng bán', 'Ngoại tệ, đánh giá lại tỷ giá cuối kỳ', 'Giá thành theo đối tượng, công trình',
+  'Lệnh sản xuất, định mức nguyên vật liệu', 'Khoản mục chi phí theo nhóm', 'Phân quyền theo vai trò, nhật ký thao tác',
+];
+
+const aiPoints = [
+  { t: 'Hỏi số liệu bằng lời', b: 'Lãi lỗ tháng này bao nhiêu, khách nào đang nợ quá hạn. Câu trả lời kèm link tới đúng báo cáo để bạn đối chiếu.' },
+  { t: 'Gợi ý định khoản', b: 'Tả nghiệp vụ, trợ lý đề xuất bút toán và mở form chứng từ điền sẵn.' },
+  { t: 'Đọc hóa đơn, sao kê', b: 'Đọc hóa đơn PDF, ảnh; nhận ra cột của tệp sao kê lạ. Số tiền luôn đọc thẳng từ tệp.' },
+  { t: 'Kiểm tra sổ định kỳ', b: 'Đầu tháng, trợ lý tóm tắt những chỗ cần xem lại của tháng trước.' },
+];
+
+const migrate = [
+  { t: 'Xuất từ phần mềm cũ', b: 'Bảng số dư và sổ nhật ký chung ra Excel. Đa số phần mềm kế toán đều có sẵn hai báo cáo này.' },
+  { t: 'Nhập và kiểm tra', b: 'FlexaBooks đọc tệp, ghép tài khoản, đối tượng, báo dòng lệch trước khi ghi một chứng từ nào.' },
+  { t: 'Làm tiếp ngay', b: 'Số dư khớp sổ cũ, bạn lập chứng từ của tháng này luôn. Gói Doanh nghiệp trở lên được hỗ trợ miễn phí.' },
+];
+---
+<BaseLayout
+  title="FlexaBooks · Phần mềm kế toán cho doanh nghiệp nhỏ và hộ kinh doanh"
+  description={`Phần mềm kế toán trên trình duyệt theo Thông tư 133, 99, 58, 152. Dùng thử ${TRIAL_DAYS} ngày đủ tính năng, không cần thẻ. Giá từ ${cheapest} mỗi năm, không phí khởi tạo.`}
+  jsonLd={[softwareJsonLd(site), faqJsonLd()]}
+>
+  <!-- Hero -->
+  <section class="relative overflow-hidden px-4 pb-16 pt-12 sm:pt-16">
+    <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[32rem] bg-gradient-to-b from-brand-50 to-transparent dark:from-brand-700/25"></div>
+    <div class="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[1fr_1.15fr]">
+      <div>
+        <p class="inline-flex items-center gap-2 rounded-full border border-brand-200 bg-surface px-3 py-1 text-sm font-medium text-brand-600 dark:border-brand-700 dark:text-brand-300">
+          <span class="h-1.5 w-1.5 rounded-full bg-accent"></span> Dùng thử {TRIAL_DAYS} ngày, đủ tính năng
+        </p>
+        <h1 class="mt-5 text-4xl font-bold leading-tight tracking-tight text-ink sm:text-5xl">
+          Phần mềm kế toán cho doanh nghiệp nhỏ và hộ kinh doanh
+        </h1>
+        <p class="mt-5 text-lg leading-relaxed text-ink-soft">
+          Sổ sách, báo cáo tài chính, tờ khai thuế theo Thông tư 133, 99, 58 và 152. Mở trình duyệt là dùng được,
+          có Trợ lý AI đọc hóa đơn và trả lời về số liệu của công ty.
+        </p>
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+          <a href={registerUrl('trial', 'hero')} data-cta="hero"
+            class="flex h-12 items-center justify-center rounded-xl bg-brand-500 px-6 font-semibold text-white transition hover:bg-brand-600">
+            Dùng thử miễn phí
+          </a>
+          <a href="#bang-gia" class="flex h-12 items-center justify-center rounded-xl border border-line bg-surface px-6 font-semibold text-ink transition hover:border-brand-500">
+            Xem bảng giá
+          </a>
+        </div>
+        <p class="mt-4 text-sm text-muted">Không cần thẻ. Từ {cheapest} mỗi năm sau khi dùng thử.</p>
+      </div>
+      <BrowserFrame src={tongQuan} alt="Màn hình tổng quan của FlexaBooks với các bước khai báo ban đầu" eager />
+    </div>
+  </section>
+
+  <!-- Dải tin cậy -->
+  <section class="border-y border-line bg-surface px-4 py-6" aria-label="Chế độ kế toán và cam kết">
+    <ul class="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm font-medium text-ink-soft">
+      {trust.map((t) => (
+        <li class="flex items-center gap-2">
+          <svg viewBox="0 0 24 24" class="h-4 w-4 text-accent" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+          {t}
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- Chọn theo loại hình -->
+  <Section eyebrow="Bạn là ai" title="Một phần mềm, ba cách dùng" lead="Chọn đúng loại hình để thấy đúng sổ, đúng mẫu báo cáo ngay từ ngày đầu.">
+    <div class="grid gap-5 md:grid-cols-3">
+      {segments.map((s) => (
+        <a href={`/bang-gia#${s.plan}`} class="group flex flex-col rounded-2xl border border-line bg-surface p-6 transition hover:border-brand-500">
+          <h3 class="text-lg font-bold text-ink">{s.title}</h3>
+          <p class="mt-2 flex-1 leading-relaxed text-ink-soft">{s.body}</p>
+          <p class="mt-5 text-sm font-semibold text-brand-600 dark:text-brand-300">Gói {s.planName} <span class="inline-block transition group-hover:translate-x-1">→</span></p>
+        </a>
+      ))}
+    </div>
+  </Section>
+
+  <!-- Tính năng -->
+  <Section id="tinh-nang" eyebrow="Tính năng" title="Đủ phân hệ của một phần mềm kế toán" lead="Mọi gói có đủ phân hệ của chế độ kế toán đó. Gói không cắt bớt kho, lương hay tài sản." class="bg-surface">
+    <div class="space-y-20">
+      {features.map((f, i) => (
+        <div class="grid items-center gap-8 lg:grid-cols-2 lg:gap-14">
+          <div class={i % 2 ? 'lg:order-2' : ''}>
+            <h3 class="text-xl font-bold text-ink sm:text-2xl">{f.title}</h3>
+            <p class="mt-3 leading-relaxed text-ink-soft">{f.body}</p>
+            <ul class="mt-5 space-y-2">
+              {f.points.map((p) => (
+                <li class="flex gap-2.5 text-ink-soft">
+                  <svg viewBox="0 0 24 24" class="mt-1 h-4 w-4 flex-none text-brand-500 dark:text-brand-300" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+                  {p}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <BrowserFrame src={f.img} alt={f.alt} class={i % 2 ? 'lg:order-1' : ''} />
+        </div>
+      ))}
+    </div>
+
+    <div class="mt-20 rounded-2xl border border-line bg-canvas p-6 sm:p-8">
+      <h3 class="text-lg font-bold text-ink">Và nhiều phân hệ khác</h3>
+      <ul class="mt-4 grid gap-x-6 gap-y-2 text-ink-soft sm:grid-cols-2 lg:grid-cols-3">
+        {moreFeatures.map((m) => <li class="flex gap-2"><span class="text-brand-500 dark:text-brand-300">•</span>{m}</li>)}
+      </ul>
+    </div>
+
+    <div class="mt-10 grid items-center gap-8 rounded-2xl border border-line bg-canvas p-6 sm:p-8 lg:grid-cols-2">
+      <div>
+        <p class="text-sm font-semibold uppercase tracking-wider text-accent">Cho hộ kinh doanh</p>
+        <h3 class="mt-2 text-xl font-bold text-ink">Không cần biết định khoản</h3>
+        <p class="mt-3 leading-relaxed text-ink-soft">
+          Sổ thu chi nhanh có hai nút: Tiền vào, Tiền ra. Chọn hàng đã bán hoặc gõ tổng tiền, phần mềm tự lập phiếu,
+          trừ kho và lên sổ của hộ theo Thông tư 152/2025. Khi cần, bật chế độ kế toán đầy đủ để xem chứng từ.
+        </p>
+      </div>
+      <BrowserFrame src={hoKinhDoanh} alt="Sổ thu chi nhanh của hộ kinh doanh với nút Tiền vào, Tiền ra" />
+    </div>
+  </Section>
+
+  <!-- Trợ lý AI -->
+  <Section id="tro-ly-ai" eyebrow="Trợ lý AI" title="Hỏi sổ sách như hỏi một đồng nghiệp" lead="Trợ lý đọc số liệu theo quyền của chính người hỏi. Trợ lý chỉ đề xuất: kế toán kiểm tra và tự bấm ghi sổ.">
+    <div class="grid items-center gap-10 lg:grid-cols-[1fr_1.2fr]">
+      <ul class="space-y-5">
+        {aiPoints.map((a) => (
+          <li class="rounded-xl border border-line bg-surface p-5">
+            <p class="font-semibold text-ink">{a.t}</p>
+            <p class="mt-1.5 text-sm leading-relaxed text-ink-soft">{a.b}</p>
+          </li>
+        ))}
+      </ul>
+      <div>
+        <BrowserFrame src={troLy} alt="Bảng Trợ lý AI mở cạnh form hóa đơn, có ô thả tệp PDF để đọc hóa đơn" />
+        <p class="mt-3 text-center text-sm text-muted">Mỗi gói tặng sẵn lượt hỏi hằng tháng. Hết lượt thì phần mềm kế toán vẫn chạy đủ.</p>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Bảng giá -->
+  <Section id="bang-gia" eyebrow="Bảng giá" title="Giá năm, cho một công ty" lead={`Dùng thử ${TRIAL_DAYS} ngày đủ tính năng rồi mới chọn gói. Giá chưa gồm thuế GTGT.`} class="bg-surface">
+    <PricingCards placement="home-pricing" />
+    <div class="mt-12 rounded-2xl border border-line bg-canvas p-6">
+      <h3 class="text-center font-bold text-ink">Gói nào cũng có</h3>
+      <ul class="mt-4 grid gap-x-6 gap-y-2 text-sm text-ink-soft sm:grid-cols-2 lg:grid-cols-4">
+        {ALL_PLANS_INCLUDE.map((x) => <li class="flex gap-2"><span class="text-accent">✓</span>{x}</li>)}
+      </ul>
+    </div>
+    <h3 class="mt-14 text-center text-xl font-bold text-ink">Ưu đãi cho khách hàng mới</h3>
+    <div class="mt-6"><Offers /></div>
+  </Section>
+
+  <!-- Chuyển dữ liệu -->
+  <Section eyebrow="Chuyển sang FlexaBooks" title="Đang dùng phần mềm khác?" lead="Mang số dư và sổ nhật ký chung sang, không phải nhập lại từ đầu năm.">
+    <ol class="grid gap-5 md:grid-cols-3">
+      {migrate.map((m, i) => (
+        <li class="rounded-2xl border border-line bg-surface p-6">
+          <span class="grid h-9 w-9 place-items-center rounded-full bg-brand-500 font-bold text-white">{i + 1}</span>
+          <p class="mt-4 font-semibold text-ink">{m.t}</p>
+          <p class="mt-1.5 text-sm leading-relaxed text-ink-soft">{m.b}</p>
+        </li>
+      ))}
+    </ol>
+  </Section>
+
+  <!-- Hỏi đáp -->
+  <Section id="cau-hoi" eyebrow="Hỏi đáp" title="Câu hỏi thường gặp" class="bg-surface">
+    <Faq />
+  </Section>
+
+  <!-- CTA cuối -->
+  <section class="px-4 py-16 sm:py-20">
+    <div class="mx-auto max-w-4xl rounded-3xl bg-brand-600 px-6 py-12 text-center text-white sm:px-12">
+      <h2 class="text-2xl font-bold sm:text-3xl">Bắt đầu với dữ liệu của chính công ty bạn</h2>
+      <p class="mx-auto mt-3 max-w-xl text-brand-100">{TRIAL_DAYS} ngày đủ tính năng, không cần thẻ. Mua gói thì giữ nguyên mọi thứ đã nhập.</p>
+      <div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+        <a href={registerUrl('trial', 'footer-cta')} data-cta="footer-cta" class="flex h-12 items-center justify-center rounded-xl bg-white px-6 font-semibold text-brand-700 transition hover:bg-brand-50">Dùng thử miễn phí</a>
+        <a href={DOCS_URL} target="_blank" rel="noopener" class="flex h-12 items-center justify-center rounded-xl border border-white/40 px-6 font-semibold text-white transition hover:bg-white/10">Đọc hướng dẫn sử dụng</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
