@@ -2,8 +2,8 @@
 import { OFFERS } from '../data/pricing';
 ---
 <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-  {OFFERS.map((o) => (
-    <li class="rounded-xl border border-line bg-surface p-5">
+  {OFFERS.map((o, i) => (
+    <li data-reveal style={`--d:${(i % 4) * 80}ms`} class="lift rounded-xl border border-line bg-surface p-5">
       <p class="font-semibold text-ink">{o.title}</p>
       <p class="mt-1.5 text-sm leading-relaxed text-ink-soft">{o.body}</p>
     </li>

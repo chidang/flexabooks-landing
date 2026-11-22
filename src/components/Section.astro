@@ -4,7 +4,7 @@ const { id, eyebrow, title, lead, class: cls = '', center = true } = Astro.props
 ---
 <section id={id} class={`px-4 py-16 sm:py-20 ${cls}`}>
   <div class="mx-auto max-w-6xl">
-    <header class={center ? 'mx-auto max-w-2xl text-center' : 'max-w-2xl'}>
+    <header data-reveal class={center ? 'mx-auto max-w-2xl text-center' : 'max-w-2xl'}>
       {eyebrow && <p class="text-sm font-semibold uppercase tracking-wider text-accent">{eyebrow}</p>}
       <h2 class="mt-2 text-2xl font-bold tracking-tight text-ink sm:text-3xl">{title}</h2>
       {lead && <p class="mt-3 text-base leading-relaxed text-ink-soft">{lead}</p>}

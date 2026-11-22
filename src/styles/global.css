@@ -58,7 +58,50 @@ body {
 .prose a { color: var(--color-brand-600); text-decoration: underline; text-underline-offset: 3px; }
 html.dark .prose a { color: var(--color-brand-300); }
 
+/* Chuyển động. Mọi hiệu ứng ẩn nội dung chỉ áp khi có lớp "motion" (preload thêm khi trình duyệt
+   không yêu cầu giảm chuyển động), nên tắt JS hay bật giảm chuyển động vẫn thấy đủ nội dung. */
+@keyframes fb-rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+@keyframes fb-pop { from { opacity: 0; transform: translateY(28px) scale(0.97); } to { opacity: 1; transform: none; } }
+@keyframes fb-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes fb-drift { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(40px, 24px) scale(1.08); } }
+@keyframes fb-pulse { 0% { box-shadow: 0 0 0 0 rgb(14 116 144 / 0.45); } 100% { box-shadow: 0 0 0 8px rgb(14 116 144 / 0); } }
+@keyframes fb-swap { from { opacity: 0.2; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+html.motion .hero-in > * { animation: fb-rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+html.motion .hero-in > :nth-child(2) { animation-delay: 0.08s; }
+html.motion .hero-in > :nth-child(3) { animation-delay: 0.16s; }
+html.motion .hero-in > :nth-child(4) { animation-delay: 0.24s; }
+html.motion .hero-in > :nth-child(5) { animation-delay: 0.32s; }
+html.motion .hero-shot { animation: fb-pop 0.9s 0.2s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+html.motion .hero-shot > * { animation: fb-float 7s 1.2s ease-in-out infinite; }
+html.motion .blob { animation: fb-drift 16s ease-in-out infinite; }
+html.motion .blob-2 { animation-duration: 21s; animation-direction: reverse; }
+html.motion .pulse-dot { animation: fb-pulse 1.8s ease-out infinite; }
+
+html.motion [data-reveal] {
+  transition: opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--d, 0ms);
+}
+html.motion [data-reveal].revealed { transition-delay: 0ms; transition-duration: 0.25s; }
+html.motion [data-reveal]:not(.is-in) { opacity: 0; transform: translateY(24px); }
+html.motion [data-reveal="left"]:not(.is-in) { transform: translateX(-32px); }
+html.motion [data-reveal="right"]:not(.is-in) { transform: translateX(32px); }
+html.motion [data-reveal="zoom"]:not(.is-in) { transform: scale(0.96); }
+
+/* Thẻ nhấc lên khi rê chuột. */
+.lift { transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease; }
+.lift:hover { transform: translateY(-4px); box-shadow: 0 18px 40px -22px rgb(71 49 31 / 0.45); }
+
+/* Số tiền đổi khi bấm công tắc kỳ hạn. */
+.swap { animation: fb-swap 0.35s ease both; }
+
+[data-header].is-scrolled { box-shadow: 0 6px 24px -12px rgb(71 49 31 / 0.35); }
+
+/* Nội dung câu hỏi mở ra. */
+details[open] > summary ~ * { animation: fb-rise 0.3s ease both; }
+
 @media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; }
   html { scroll-behavior: auto; }
   * { transition: none !important; }
 }
