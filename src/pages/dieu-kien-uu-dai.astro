@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { EARLY_BIRD, REFERRAL_MONTHS, REFUND_DAYS, SERVICE_FIRM, TERMS, TRIAL_DAYS } from '../data/pricing';
+import { EARLY_BIRD, REFERRAL_MONTHS, REFUND_DAYS, SERVICE_FIRM, SERVICE_FIRM_TIERS, TERMS, TRIAL_DAYS, formatVnd, tierLabel } from '../data/pricing';
 import { SUPPORT_PHONE_DISPLAY, ZALO_CHAT_URL } from '../lib/contact';
 ---
 <BaseLayout title="Điều kiện ưu đãi · FlexaBooks" description="Điều kiện áp dụng của dùng thử, giảm giá năm đầu, mua nhiều năm, giới thiệu, kế toán dịch vụ và hoàn tiền của FlexaBooks.">
@@ -41,7 +41,9 @@ import { SUPPORT_PHONE_DISPLAY, ZALO_CHAT_URL } from '../lib/contact';
     <h2>5. Kế toán dịch vụ</h2>
     <ul>
       <li>Áp dụng khi một tài khoản giữ sổ cho nhiều công ty và các công ty mua gói qua cùng một đơn vị.</li>
-      <li>Từ công ty thứ {SERVICE_FIRM.fromCompany} trở đi giảm {SERVICE_FIRM.percent}% giá gói của công ty đó.</li>
+      <li>Đơn từ {SERVICE_FIRM.fromCompany} công ty trở lên tính giá mỗi công ty theo tổng số công ty của đơn: {SERVICE_FIRM_TIERS.map((t) => `${tierLabel(t).toLowerCase()} giá ${formatVnd(t.pricePerYear)}`).join('; ')} (mỗi công ty, mỗi năm).</li>
+      <li>Mỗi công ty dùng đủ tính năng gói Doanh nghiệp. Công ty cần gói Chuyên nghiệp thì giảm {SERVICE_FIRM.proPercent}% giá gói đó.</li>
+      <li>Thêm công ty giữa năm tính theo số tháng còn lại. Đủ số công ty của bậc sau thì cả đơn sang giá bậc sau từ kỳ gia hạn.</li>
     </ul>
 
     <h2>6. Chuyển dữ liệu từ phần mềm cũ</h2>
@@ -51,7 +53,14 @@ import { SUPPORT_PHONE_DISPLAY, ZALO_CHAT_URL } from '../lib/contact';
       <li>Phạm vi là dữ liệu của năm đang làm và số dư đầu năm đó.</li>
     </ul>
 
-    <h2>7. Hoàn tiền</h2>
+    <h2>7. Hướng dẫn 1:1 trong 30 ngày đầu</h2>
+    <ul>
+      <li>Áp dụng cho mọi gói, tính từ ngày thanh toán lần đầu.</li>
+      <li>Hẹn lịch qua Zalo hoặc điện thoại, mỗi buổi chia sẻ màn hình với người phụ trách của chúng tôi để làm cùng bạn: khai báo danh mục, số dư đầu kỳ, lập chứng từ, in sổ, lập báo cáo.</li>
+      <li>Nội dung là cách dùng phần mềm; phần mềm không thay bạn kiểm số liệu, sổ, tờ khai trước khi nộp.</li>
+    </ul>
+
+    <h2>8. Hoàn tiền</h2>
     <ul>
       <li>Trong {REFUND_DAYS} ngày kể từ ngày thanh toán lần đầu, bạn báo không muốn dùng tiếp thì được hoàn lại số tiền đã trả cho gói.</li>
       <li>Phí Trợ lý AI đã dùng không hoàn lại, như Điều khoản sử dụng.</li>

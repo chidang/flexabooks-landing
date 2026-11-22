@@ -1,7 +1,7 @@
 ---
 // Ba thẻ giá với công tắc kỳ hạn 1, 2, 3 năm. Mọi số tính sẵn lúc build và gắn vào data-*;
 // script chỉ đổi chữ hiển thị nên không có JS thì vẫn đọc được giá 1 năm.
-import { EARLY_BIRD, PLANS, TERMS, formatTokens, formatVnd, monthlyPrice } from '../data/pricing';
+import { EARLY_BIRD, PLANS, TERMS, formatTokens, formatUsers, formatVnd, monthlyPrice } from '../data/pricing';
 import { registerUrl } from '../lib/contact';
 
 interface Props { placement?: string }
@@ -47,7 +47,7 @@ const check = 'M5 12.5l4.5 4.5L19 7.5';
           </a>
 
           <dl class="mt-6 space-y-2 border-t border-line pt-5 text-sm">
-            <div class="flex justify-between gap-3"><dt class="text-muted">Người dùng</dt><dd class="font-semibold text-ink">{p.users}</dd></div>
+            <div class="flex justify-between gap-3"><dt class="text-muted">Người dùng</dt><dd class="font-semibold text-ink">{formatUsers(p.users)}</dd></div>
             <div class="flex justify-between gap-3"><dt class="text-muted">Trợ lý AI</dt><dd class="font-semibold text-ink">{formatTokens(p.aiTokens)}/tháng</dd></div>
             <div class="flex justify-between gap-3"><dt class="text-muted">Số chứng từ</dt><dd class="font-semibold text-ink">Không giới hạn</dd></div>
           </dl>

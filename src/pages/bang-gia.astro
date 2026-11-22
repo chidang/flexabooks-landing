@@ -4,7 +4,7 @@ import Section from '../components/Section.astro';
 import PricingCards from '../components/PricingCards.astro';
 import Offers from '../components/Offers.astro';
 import Faq from '../components/Faq.astro';
-import { ALL_PLANS_INCLUDE, PLANS, TRIAL_DAYS, formatTokens, formatVnd } from '../data/pricing';
+import { ALL_PLANS_INCLUDE, PLANS, SERVICE_FIRM, SERVICE_FIRM_TIERS, TRIAL_DAYS, formatTokens, formatUsers, formatVnd, tierLabel } from '../data/pricing';
 import { faqJsonLd, softwareJsonLd } from '../lib/jsonld';
 
 const site = Astro.site!;
@@ -13,14 +13,14 @@ const no = '–';
 // Bảng so ngắn: các gói khác nhau ở loại hình, số người dùng, Trợ lý AI và mức hỗ trợ.
 const rows: { label: string; values: string[] }[] = [
   { label: 'Giá mỗi năm', values: PLANS.map((p) => formatVnd(p.pricePerYear)) },
-  { label: 'Người dùng', values: PLANS.map((p) => String(p.users)) },
+  { label: 'Người dùng', values: PLANS.map((p) => formatUsers(p.users)) },
   { label: 'Trợ lý AI mỗi tháng', values: PLANS.map((p) => formatTokens(p.aiTokens)) },
   { label: 'Hộ kinh doanh (TT152/2025)', values: [yes, yes, yes] },
   { label: 'DN siêu nhỏ (TT58/2026)', values: [yes, yes, yes] },
   { label: 'DN theo TT133, TT99', values: [no, yes, yes] },
   { label: 'Quỹ, ngân hàng, hóa đơn, kho', values: [yes, yes, yes] },
   { label: 'Mua bán, công nợ, đơn hàng, hợp đồng', values: [yes, yes, yes] },
-  { label: 'CCDC, TSCĐ, tiền lương, thuế TNCN', values: [no, yes, yes] },
+  { label: 'CCDC, TSCĐ, tiền lương, thuế TNCN', values: [yes, yes, yes] },
   { label: 'Sổ S1 đến S4d, B01, B02-DNSN', values: [yes, yes, yes] },
   { label: 'Tờ khai 01/GTGT theo tháng, quý', values: [yes, yes, yes] },
   { label: 'BCTC theo TT133, TT99; tờ khai 03/TNDN', values: [no, yes, yes] },
@@ -28,7 +28,8 @@ const rows: { label: string; values: string[] }[] = [
   { label: 'Giá thành sản xuất, công trình', values: [no, no, yes] },
   { label: 'Rà soát số liệu, nhập sổ từ phần mềm khác', values: [no, no, yes] },
   { label: 'Chuyển dữ liệu từ phần mềm cũ', values: [no, 'Miễn phí', 'Làm hộ bạn'] },
-  { label: 'Hỗ trợ', values: ['Zalo', 'Zalo, điện thoại, 1:1', 'Ưu tiên'] },
+  { label: 'Hướng dẫn 1:1 trong 30 ngày đầu', values: [yes, yes, yes] },
+  { label: 'Hỗ trợ', values: ['Zalo, điện thoại', 'Zalo, điện thoại', 'Ưu tiên, cả ngoài giờ'] },
 ];
 ---
 <BaseLayout
@@ -59,7 +60,7 @@ const rows: { label: string; values: string[] }[] = [
         </tbody>
       </table>
     </div>
-    <p class="mt-3 text-sm text-muted">Bảng cuộn ngang trên điện thoại. Lượt hỏi Trợ lý AI là số ước tính, tùy độ dài câu hỏi.</p>
+    <p class="mt-3 text-sm text-muted">Bảng cuộn ngang trên điện thoại.</p>
 
     <div class="mt-12 rounded-2xl border border-line bg-canvas p-6">
       <h3 class="text-center font-bold text-ink">Gói nào cũng có</h3>
@@ -69,7 +70,24 @@ const rows: { label: string; values: string[] }[] = [
     </div>
   </Section>
 
-  <Section eyebrow="Ưu đãi" title="Ưu đãi cho khách hàng mới">
+  <Section id="ke-toan-dich-vu" eyebrow="Kế toán dịch vụ" title="Giá cho đơn vị giữ sổ nhiều công ty" lead={`Một tài khoản đăng nhập dùng cho mọi công ty bạn giữ sổ. Từ ${SERVICE_FIRM.fromCompany} công ty trở lên, giá mỗi công ty tính theo tổng số công ty bạn mua.`}>
+    <div class="mx-auto grid max-w-3xl gap-4 sm:grid-cols-3">
+      {SERVICE_FIRM_TIERS.map((t, i) => (
+        <div class="lift rounded-2xl border border-line bg-surface p-6 text-center" data-reveal style={`--d:${i * 80}ms`}>
+          <p class="text-sm font-semibold text-muted">{tierLabel(t)}</p>
+          <p class="mt-2 text-2xl font-extrabold text-ink">{formatVnd(t.pricePerYear)}</p>
+          <p class="mt-1 text-sm text-muted">mỗi công ty, mỗi năm</p>
+        </div>
+      ))}
+    </div>
+    <ul class="mx-auto mt-6 max-w-3xl space-y-2 text-sm text-ink-soft">
+      <li class="flex gap-2"><span class="text-accent">✓</span>Mỗi công ty dùng đủ tính năng gói Doanh nghiệp, kể cả hộ kinh doanh và doanh nghiệp siêu nhỏ.</li>
+      <li class="flex gap-2"><span class="text-accent">✓</span>Công ty có sản xuất, công trình cần gói Chuyên nghiệp thì giảm {SERVICE_FIRM.proPercent}% giá gói đó.</li>
+      <li class="flex gap-2"><span class="text-accent">✓</span>Thêm công ty giữa năm thì tính theo số tháng còn lại; đủ số công ty của bậc sau thì cả đơn sang giá bậc sau từ kỳ gia hạn.</li>
+    </ul>
+  </Section>
+
+  <Section eyebrow="Ưu đãi" title="Ưu đãi cho khách hàng mới" class="bg-surface">
     <Offers />
   </Section>
 

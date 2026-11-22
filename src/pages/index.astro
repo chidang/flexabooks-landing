@@ -39,9 +39,14 @@ const segments = [
     plan: 'doanh-nghiep', planName: 'Doanh nghiệp',
   },
   {
-    title: 'Sản xuất, xây lắp, kế toán dịch vụ',
-    body: 'Giá thành theo đối tượng, lệnh sản xuất, công trình. Một tài khoản giữ sổ nhiều công ty.',
+    title: 'Sản xuất, xây lắp',
+    body: 'Giá thành theo đối tượng, lệnh sản xuất, công trình, hạng mục.',
     plan: 'chuyen-nghiep', planName: 'Chuyên nghiệp',
+  },
+  {
+    title: 'Kế toán dịch vụ',
+    body: 'Một tài khoản giữ sổ nhiều công ty. Từ 3 công ty có giá riêng, chỉ từ 500.000đ mỗi công ty một năm.',
+    plan: 'ke-toan-dich-vu', planName: 'Kế toán dịch vụ',
   },
 ];
 
@@ -152,13 +157,13 @@ const migrate = [
   </section>
 
   <!-- Chọn theo loại hình -->
-  <Section eyebrow="Bạn là ai" title="Một phần mềm, ba cách dùng" lead="Chọn đúng loại hình để thấy đúng sổ, đúng mẫu báo cáo ngay từ ngày đầu.">
-    <div class="grid gap-5 md:grid-cols-3">
+  <Section eyebrow="Bạn là ai" title="Một phần mềm, bốn cách dùng" lead="Chọn đúng loại hình để thấy đúng sổ, đúng mẫu báo cáo ngay từ ngày đầu.">
+    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
       {segments.map((s, i) => (
         <a href={`/bang-gia#${s.plan}`} data-reveal style={`--d:${i * 100}ms`} class="lift group flex flex-col rounded-2xl border border-line bg-surface p-6 transition hover:border-brand-500">
           <h3 class="text-lg font-bold text-ink">{s.title}</h3>
           <p class="mt-2 flex-1 leading-relaxed text-ink-soft">{s.body}</p>
-          <p class="mt-5 text-sm font-semibold text-brand-600 dark:text-brand-300">Gói {s.planName} <span class="inline-block transition group-hover:translate-x-1">→</span></p>
+          <p class="mt-5 text-sm font-semibold text-brand-600 dark:text-brand-300">{s.plan === 'ke-toan-dich-vu' ? 'Xem giá' : `Gói ${s.planName}`} <span class="inline-block transition group-hover:translate-x-1">→</span></p>
         </a>
       ))}
     </div>

@@ -5,6 +5,7 @@
 // ưu đãi khách đăng ký sớm (`EARLY_BIRD`). `aiTokens` là đúng số đặt vào
 // ai_company_settings.monthly_token_limit của công ty: phần mềm cộng cả token vào, ra, đọc và ghi cache
 // trong tháng dương lịch (Ai::QuotaGuard), nên trang ghi theo token, không quy ra số câu hỏi.
+// Bảng giá kế toán dịch vụ (`SERVICE_FIRM_TIERS`) cũng cần người dùng duyệt.
 
 export type PlanId = 'ho-sieu-nho' | 'doanh-nghiep' | 'chuyen-nghiep';
 
@@ -15,7 +16,8 @@ export interface Plan {
   pricePerYear: number;
   featured?: boolean;
   audience: string;
-  users: number;
+  /** null là không giới hạn. */
+  users: number | null;
   /** Hạn mức token Trợ lý AI mỗi tháng. */
   aiTokens: number;
   support: string;
@@ -31,14 +33,15 @@ export const PLANS: Plan[] = [
     tagline: 'Cho hộ, cá nhân kinh doanh và doanh nghiệp siêu nhỏ',
     pricePerYear: 1_000_000,
     audience: 'Hộ, cá nhân kinh doanh (Thông tư 152/2025); doanh nghiệp siêu nhỏ (Thông tư 58/2026)',
-    users: 2,
+    users: 3,
     aiTokens: 1_000_000,
-    support: 'Hỗ trợ qua Zalo, giờ hành chính',
+    support: 'Zalo, điện thoại, giờ hành chính',
     includes: [
       'Sổ thu chi nhanh: ghi tiền vào, tiền ra, không cần biết định khoản',
       'Sổ S1a đến S3a của hộ kinh doanh, thuế GTGT, thuế TNCN theo kỳ',
       'Sổ S1 đến S4d và báo cáo B01, B02 của doanh nghiệp siêu nhỏ',
       'Hóa đơn mua vào, bán ra; kho hàng; tiền mặt, ngân hàng',
+      'Công cụ dụng cụ, tài sản cố định, tiền lương, thuế TNCN',
     ],
   },
   {
@@ -48,9 +51,9 @@ export const PLANS: Plan[] = [
     pricePerYear: 1_500_000,
     featured: true,
     audience: 'Doanh nghiệp theo Thông tư 133/2016 hoặc Thông tư 99/2025',
-    users: 5,
+    users: 10,
     aiTokens: 2_000_000,
-    support: 'Zalo, điện thoại; hướng dẫn 1:1 lúc khai báo ban đầu',
+    support: 'Zalo, điện thoại, giờ hành chính',
     includes: [
       'Quỹ, ngân hàng, nhập sao kê Excel, CSV của ngân hàng',
       'Mua hàng, bán hàng, đơn đặt hàng, hợp đồng bán, công nợ',
@@ -65,9 +68,9 @@ export const PLANS: Plan[] = [
     tagline: 'Cho sản xuất, xây lắp và kế toán dịch vụ',
     pricePerYear: 2_000_000,
     audience: 'Doanh nghiệp TT133, TT99 có sản xuất, thi công công trình',
-    users: 10,
+    users: null,
     aiTokens: 5_000_000,
-    support: 'Hỗ trợ ưu tiên; chúng tôi chuyển dữ liệu từ phần mềm cũ cho bạn',
+    support: 'Hỗ trợ ưu tiên, cả ngoài giờ; chúng tôi chuyển dữ liệu từ phần mềm cũ cho bạn',
     includes: [
       'Mọi thứ của gói Doanh nghiệp',
       'Giá thành sản xuất, định mức nguyên vật liệu, lệnh sản xuất',
@@ -87,6 +90,7 @@ export const ALL_PLANS_INCLUDE = [
   'Xuất Excel, in sổ theo mẫu',
   'Phân quyền theo vai trò',
   'Trợ lý AI tặng kèm mỗi tháng',
+  'Hướng dẫn 1:1 trong 30 ngày đầu sau khi mua',
 ];
 
 /** Mua nhiều năm: trả đủ số năm, được thêm số tháng. */
@@ -98,7 +102,15 @@ export const TERMS = [
 
 export const EARLY_BIRD = { percent: 30, deadline: '31/03/2027' };
 export const REFERRAL_MONTHS = 2;
-export const SERVICE_FIRM = { percent: 20, fromCompany: 3 };
+// Kế toán dịch vụ: một đơn vị mua cho nhiều công ty thì giá mỗi công ty tính theo tổng số công ty
+// của đơn. Mỗi công ty dùng đủ tính năng gói Doanh nghiệp (cả hộ kinh doanh, DN siêu nhỏ); công ty
+// cần gói Chuyên nghiệp thì giảm `proPercent` trên giá gói đó.
+export const SERVICE_FIRM = { fromCompany: 3, proPercent: 20 };
+export const SERVICE_FIRM_TIERS = [
+  { from: 3, to: 9, pricePerYear: 700_000 },
+  { from: 10, to: 19, pricePerYear: 600_000 },
+  { from: 20, to: null, pricePerYear: 500_000 },
+] as const;
 export const REFUND_DAYS = 30;
 
 export const OFFERS = [
@@ -107,10 +119,17 @@ export const OFFERS = [
   { title: `Giảm ${EARLY_BIRD.percent}% năm đầu`, body: `Cho khách đăng ký và mua gói trước ngày ${EARLY_BIRD.deadline}.` },
   { title: 'Mua dài, tặng thêm tháng', body: 'Mua 2 năm tặng 3 tháng, mua 3 năm tặng 6 tháng.' },
   { title: `Giới thiệu được ${REFERRAL_MONTHS} tháng`, body: `Bạn và người được giới thiệu mỗi bên được thêm ${REFERRAL_MONTHS} tháng khi người đó mua gói.` },
-  { title: `Kế toán dịch vụ giảm ${SERVICE_FIRM.percent}%`, body: `Giữ sổ nhiều công ty thì từ công ty thứ ${SERVICE_FIRM.fromCompany} giảm ${SERVICE_FIRM.percent}%.` },
+  { title: 'Giá riêng cho kế toán dịch vụ', body: `Từ ${SERVICE_FIRM.fromCompany} công ty, mỗi công ty chỉ từ ${(SERVICE_FIRM_TIERS[SERVICE_FIRM_TIERS.length - 1].pricePerYear).toLocaleString('vi-VN')}đ một năm, đủ tính năng gói Doanh nghiệp.` },
   { title: 'Chuyển dữ liệu miễn phí', body: 'Gói Doanh nghiệp trở lên: mang số dư và sổ nhật ký chung từ phần mềm cũ sang.' },
   { title: `Hoàn tiền trong ${REFUND_DAYS} ngày`, body: `Không hài lòng trong ${REFUND_DAYS} ngày đầu sau khi mua thì hoàn lại tiền.` },
 ];
+
+/** null → "Không giới hạn". */
+export const formatUsers = (n: number | null) => (n === null ? 'Không giới hạn' : String(n));
+
+/** Khoảng số công ty của một bậc giá kế toán dịch vụ: "3 đến 9 công ty", "Từ 20 công ty". */
+export const tierLabel = (t: { from: number; to: number | null }) =>
+  t.to === null ? `Từ ${t.from} công ty` : `${t.from} đến ${t.to} công ty`;
 
 export const formatVnd = (n: number) => `${n.toLocaleString('vi-VN')}đ`;
 
