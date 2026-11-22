@@ -26,8 +26,12 @@ export const FAQ = [
     a: 'Trợ lý trả lời câu hỏi về số liệu của công ty, gợi ý định khoản, đọc hóa đơn PDF hay ảnh để điền form, ghép cột sao kê và chỉ ra chỗ sổ có thể sai. Trợ lý không tự ghi sổ: bút toán đề xuất mở ra form chứng từ để bạn kiểm tra và tự bấm lưu.',
   },
   {
-    q: 'Dùng hết lượt hỏi AI trong tháng thì sao?',
-    a: 'Phần mềm kế toán vẫn chạy đủ. Trợ lý tạm dừng tới đầu tháng sau, hoặc bạn mua thêm lượt hỏi.',
+    q: 'Hạn mức token của Trợ lý AI tính thế nào?',
+    a: 'Token là đơn vị đo lượng chữ trợ lý đọc và viết. Mỗi lần hỏi, phần mềm cộng cả phần câu hỏi, số liệu trợ lý phải đọc và câu trả lời, nên câu hỏi cần đọc nhiều sổ sẽ tốn nhiều token hơn. Hạn mức tính theo tháng dương lịch, đầu tháng tính lại từ đầu. Màn hình Trợ lý AI hiện số token đã dùng và nhắc khi sắp hết.',
+  },
+  {
+    q: 'Dùng hết hạn mức token trong tháng thì sao?',
+    a: 'Phần mềm kế toán vẫn chạy đủ. Trợ lý tạm dừng tới đầu tháng sau, hoặc bạn mua thêm token.',
   },
   {
     q: 'Có xuất hóa đơn GTGT cho phí phần mềm không?',

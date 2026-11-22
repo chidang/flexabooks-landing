@@ -1,9 +1,10 @@
 // Nguồn duy nhất của giá, gói và ưu đãi cho trang chủ, /bang-gia, /dieu-kien-uu-dai và JSON-LD.
 // Giá tính theo năm, cho một công ty (một mã số thuế), chưa gồm thuế GTGT.
 //
-// CẦN NGƯỜI DÙNG DUYỆT TRƯỚC KHI CÔNG BỐ: ba mức hạn mức Trợ lý AI (`aiQuestions`) và hạn của
-// ưu đãi khách đăng ký sớm (`EARLY_BIRD`). Hạn mức thật đặt ở ai_company_settings.monthly_token_limit
-// của từng công ty; con số ở đây là số lượt hỏi ước tính cho người đọc.
+// CẦN NGƯỜI DÙNG DUYỆT TRƯỚC KHI CÔNG BỐ: ba mức hạn mức Trợ lý AI (`aiTokens`) và hạn của
+// ưu đãi khách đăng ký sớm (`EARLY_BIRD`). `aiTokens` là đúng số đặt vào
+// ai_company_settings.monthly_token_limit của công ty: phần mềm cộng cả token vào, ra, đọc và ghi cache
+// trong tháng dương lịch (Ai::QuotaGuard), nên trang ghi theo token, không quy ra số câu hỏi.
 
 export type PlanId = 'ho-sieu-nho' | 'doanh-nghiep' | 'chuyen-nghiep';
 
@@ -15,7 +16,8 @@ export interface Plan {
   featured?: boolean;
   audience: string;
   users: number;
-  aiQuestions: number;
+  /** Hạn mức token Trợ lý AI mỗi tháng. */
+  aiTokens: number;
   support: string;
   includes: string[];
 }
@@ -30,7 +32,7 @@ export const PLANS: Plan[] = [
     pricePerYear: 1_000_000,
     audience: 'Hộ, cá nhân kinh doanh (Thông tư 152/2025); doanh nghiệp siêu nhỏ (Thông tư 58/2026)',
     users: 2,
-    aiQuestions: 30,
+    aiTokens: 1_000_000,
     support: 'Hỗ trợ qua Zalo, giờ hành chính',
     includes: [
       'Sổ thu chi nhanh: ghi tiền vào, tiền ra, không cần biết định khoản',
@@ -47,7 +49,7 @@ export const PLANS: Plan[] = [
     featured: true,
     audience: 'Doanh nghiệp theo Thông tư 133/2016 hoặc Thông tư 99/2025',
     users: 5,
-    aiQuestions: 100,
+    aiTokens: 2_000_000,
     support: 'Zalo, điện thoại; hướng dẫn 1:1 lúc khai báo ban đầu',
     includes: [
       'Quỹ, ngân hàng, nhập sao kê Excel, CSV của ngân hàng',
@@ -64,7 +66,7 @@ export const PLANS: Plan[] = [
     pricePerYear: 2_000_000,
     audience: 'Doanh nghiệp TT133, TT99 có sản xuất, thi công công trình',
     users: 10,
-    aiQuestions: 300,
+    aiTokens: 5_000_000,
     support: 'Hỗ trợ ưu tiên; chúng tôi chuyển dữ liệu từ phần mềm cũ cho bạn',
     includes: [
       'Mọi thứ của gói Doanh nghiệp',
@@ -115,4 +117,9 @@ export const formatVnd = (n: number) => `${n.toLocaleString('vi-VN')}đ`;
 /** Giá quy ra tháng, làm tròn tới nghìn đồng, tính cả tháng tặng. */
 export function monthlyPrice(plan: Plan, years = 1, bonusMonths = 0): number {
   return Math.round((plan.pricePerYear * years) / (years * 12 + bonusMonths) / 1000) * 1000;
+}
+
+/** 1_000_000 → "1 triệu token", 2_500_000 → "2,5 triệu token". */
+export function formatTokens(n: number): string {
+  return `${(n / 1_000_000).toLocaleString('vi-VN', { maximumFractionDigits: 1 })} triệu token`;
 }

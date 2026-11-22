@@ -4,7 +4,7 @@ import Section from '../components/Section.astro';
 import PricingCards from '../components/PricingCards.astro';
 import Offers from '../components/Offers.astro';
 import Faq from '../components/Faq.astro';
-import { ALL_PLANS_INCLUDE, PLANS, TRIAL_DAYS, formatVnd } from '../data/pricing';
+import { ALL_PLANS_INCLUDE, PLANS, TRIAL_DAYS, formatTokens, formatVnd } from '../data/pricing';
 import { faqJsonLd, softwareJsonLd } from '../lib/jsonld';
 
 const site = Astro.site!;
@@ -14,7 +14,7 @@ const no = '–';
 const rows: { label: string; values: string[] }[] = [
   { label: 'Giá mỗi năm', values: PLANS.map((p) => formatVnd(p.pricePerYear)) },
   { label: 'Người dùng', values: PLANS.map((p) => String(p.users)) },
-  { label: 'Trợ lý AI mỗi tháng', values: PLANS.map((p) => `${p.aiQuestions} lượt hỏi`) },
+  { label: 'Trợ lý AI mỗi tháng', values: PLANS.map((p) => formatTokens(p.aiTokens)) },
   { label: 'Hộ kinh doanh (TT152/2025)', values: [yes, yes, yes] },
   { label: 'DN siêu nhỏ (TT58/2026)', values: [yes, yes, yes] },
   { label: 'DN theo TT133, TT99', values: [no, yes, yes] },
