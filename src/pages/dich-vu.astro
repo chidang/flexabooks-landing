@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import { SERVICES, SERVICE_STEPS } from '../data/services';
+import { SUPPORT_PHONE, SUPPORT_PHONE_DISPLAY, ZALO_CHAT_URL } from '../lib/contact';
+---
+<BaseLayout title="Dịch vụ theo yêu cầu" description="Chỉnh mẫu chứng từ, mẫu báo cáo, cách nhập liệu và tính toán theo yêu cầu, thêm chức năng riêng, kết nối FlexaBooks với hệ thống công ty đang dùng. Khảo sát và báo giá miễn phí.">
+  <section class="px-4 pb-6 pt-14 sm:pt-20">
+    <div data-reveal class="mx-auto max-w-3xl text-center">
+      <p class="text-sm font-semibold uppercase tracking-wider text-accent">Dịch vụ</p>
+      <h1 class="mt-2 text-3xl font-bold tracking-tight text-ink sm:text-4xl">Làm theo yêu cầu của công ty bạn</h1>
+      <p class="mt-4 text-base leading-relaxed text-ink-soft sm:text-lg">Chỉnh phần mềm theo mẫu và cách làm riêng, thêm chức năng còn thiếu, nối với phần mềm công ty đang chạy. Khảo sát và báo giá miễn phí, giá theo khối lượng từng việc.</p>
+      <div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+        <a href={ZALO_CHAT_URL} target="_blank" rel="noopener" data-cta="services-hero-zalo" class="flex h-12 items-center justify-center rounded-xl bg-brand-500 px-6 font-semibold text-white transition hover:bg-brand-600">Gửi yêu cầu qua Zalo</a>
+        <a href={`tel:${SUPPORT_PHONE}`} data-cta="services-hero-phone" class="flex h-12 items-center justify-center rounded-xl border border-line px-6 font-semibold text-ink transition hover:bg-surface">Gọi {SUPPORT_PHONE_DISPLAY}</a>
+      </div>
+    </div>
+  </section>
+
+  {SERVICES.map((s, si) => (
+    <Section id={s.id} eyebrow={`${si + 1} / ${SERVICES.length}`} title={s.title} lead={s.lead} class={si % 2 === 0 ? 'bg-surface' : ''}>
+      <div class={`grid gap-5 sm:grid-cols-2 ${s.items.length === 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-3'}`}>
+        {s.items.map((it, i) => (
+          <div data-reveal style={`--d:${i * 80}ms`} class={`lift rounded-2xl border border-line p-6 ${si % 2 === 0 ? 'bg-canvas' : 'bg-surface'}`}>
+            <p class="font-semibold text-ink">{it.t}</p>
+            <p class="mt-1.5 text-sm leading-relaxed text-ink-soft">{it.b}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+  ))}
+
+  <Section eyebrow="Cách làm" title="Bốn bước, có báo giá trước khi làm" class="bg-surface">
+    <ol class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {SERVICE_STEPS.map((m, i) => (
+        <li data-reveal style={`--d:${i * 100}ms`} class="lift rounded-2xl border border-line bg-canvas p-6">
+          <span class="grid h-9 w-9 place-items-center rounded-full bg-brand-500 font-bold text-white">{i + 1}</span>
+          <p class="mt-4 font-semibold text-ink">{m.t}</p>
+          <p class="mt-1.5 text-sm leading-relaxed text-ink-soft">{m.b}</p>
+        </li>
+      ))}
+    </ol>
+    <ul class="mx-auto mt-10 max-w-3xl space-y-2 text-sm text-ink-soft">
+      <li class="flex gap-2"><span class="text-accent">✓</span>Báo cáo tài chính, tờ khai thuế và sổ kế toán giữ đúng mẫu của cơ quan nhà nước. Phần chỉnh sửa áp dụng cho mẫu chứng từ, báo cáo quản trị, cách nhập và cách tính.</li>
+      <li class="flex gap-2"><span class="text-accent">✓</span>Phần làm riêng chạy trên chính tài khoản FlexaBooks của công ty bạn, dữ liệu không tách sang hệ thống khác.</li>
+      <li class="flex gap-2"><span class="text-accent">✓</span>Cách kết nối (qua API, tệp Excel, CSV hoặc XML) chốt lúc khảo sát, tùy hệ thống của bạn cho phép gì.</li>
+    </ul>
+  </Section>
+
+  <section class="px-4 py-16 sm:py-20">
+    <div data-reveal="zoom" class="mx-auto max-w-4xl rounded-3xl bg-brand-600 px-6 py-12 text-center text-white sm:px-12">
+      <h2 class="text-2xl font-bold sm:text-3xl">Có mẫu đang dùng? Gửi cho chúng tôi xem</h2>
+      <p class="mx-auto mt-3 max-w-xl text-brand-100">Gửi ảnh mẫu chứng từ, bảng Excel báo cáo hay mô tả hệ thống cần nối. Chúng tôi trả lời cách làm và báo giá.</p>
+      <div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+        <a href={ZALO_CHAT_URL} target="_blank" rel="noopener" data-cta="services-footer-zalo" class="flex h-12 items-center justify-center rounded-xl bg-white px-6 font-semibold text-brand-700 transition hover:bg-brand-50">Nhắn Zalo</a>
+        <a href={`tel:${SUPPORT_PHONE}`} data-cta="services-footer-phone" class="flex h-12 items-center justify-center rounded-xl border border-white/40 px-6 font-semibold text-white transition hover:bg-white/10">Gọi {SUPPORT_PHONE_DISPLAY}</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

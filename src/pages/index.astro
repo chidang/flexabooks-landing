@@ -8,6 +8,7 @@ import Faq from '../components/Faq.astro';
 import { ALL_PLANS_INCLUDE, TRIAL_DAYS, PLANS, formatVnd } from '../data/pricing';
 import { DOCS_URL, registerUrl } from '../lib/contact';
 import { faqJsonLd, softwareJsonLd } from '../lib/jsonld';
+import { SERVICES } from '../data/services';
 
 import tongQuan from '../assets/screens/tong-quan.png';
 import saoKe from '../assets/screens/sao-ke.png';
@@ -92,6 +93,22 @@ const features = [
 const moreFeatures = [
   'Báo giá, đơn đặt hàng, hợp đồng bán', 'Ngoại tệ, đánh giá lại tỷ giá cuối kỳ', 'Giá thành theo đối tượng, công trình',
   'Lệnh sản xuất, định mức nguyên vật liệu', 'Khoản mục chi phí theo nhóm', 'Phân quyền theo vai trò, nhật ký thao tác',
+];
+
+const multiCompanyPoints = [
+  'Một lần đăng nhập vào được mọi công ty bạn giữ sổ',
+  'Công ty đang làm và các công ty vừa mở nằm đầu danh sách',
+  'Tìm theo tên hoặc mã số thuế, gõ không dấu vẫn ra',
+  'Thanh trên cùng luôn ghi tên, mã số thuế của công ty đang mở',
+  'Phân quyền riêng từng công ty: kế toán trưởng ở công ty này, người xem ở công ty khác',
+];
+
+// Dữ liệu minh họa cho khung "Công ty của tôi": tên và mã số thuế đều là giả.
+const demoCompanies = [
+  { name: 'Công ty TNHH Gốm Phú An', tax: '0312 345 678', role: 'Kế toán trưởng', active: true },
+  { name: 'Công ty CP Thực phẩm Sông Hậu', tax: '1801 234 567', role: 'Kế toán viên' },
+  { name: 'Hộ kinh doanh Trần Minh Tâm', tax: '8012 345 678', role: 'Kế toán viên' },
+  { name: 'Công ty TNHH Xây dựng Hòa Bình Xanh', tax: '0109 876 543', role: 'Người xem' },
 ];
 
 const aiPoints = [
@@ -209,6 +226,61 @@ const migrate = [
       </div>
       <BrowserFrame src={hoKinhDoanh} alt="Sổ thu chi nhanh của hộ kinh doanh với nút Tiền vào, Tiền ra" />
     </div>
+
+    <div id="nhieu-cong-ty" data-reveal class="mt-10 grid items-center gap-8 rounded-2xl border border-line bg-canvas p-6 sm:p-8 lg:grid-cols-2">
+      <div>
+        <p class="text-sm font-semibold uppercase tracking-wider text-accent">Cho kế toán dịch vụ</p>
+        <h3 class="mt-2 text-xl font-bold text-ink">Giữ sổ nhiều công ty trên một tài khoản</h3>
+        <p class="mt-3 leading-relaxed text-ink-soft">
+          Trang Công ty của tôi liệt kê mọi công ty bạn được vào, kèm mã số thuế và quyền của bạn ở từng nơi.
+          Bấm một lần là sang công ty khác; số liệu của mỗi công ty tách riêng, không lẫn sang nhau.
+        </p>
+        <ul class="mt-5 space-y-2">
+          {multiCompanyPoints.map((p) => (
+            <li class="flex gap-2.5 text-ink-soft">
+              <svg viewBox="0 0 24 24" class="mt-1 h-4 w-4 flex-none text-brand-500 dark:text-brand-300" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+              {p}
+            </li>
+          ))}
+        </ul>
+        <a href="/bang-gia#ke-toan-dich-vu" class="group mt-6 inline-block text-sm font-semibold text-brand-600 dark:text-brand-300">
+          Giá cho kế toán dịch vụ <span class="inline-block transition group-hover:translate-x-1">→</span>
+        </a>
+      </div>
+
+      <figure role="img" aria-label="Minh họa trang Công ty của tôi: ô tìm theo tên hoặc mã số thuế và danh sách công ty, mỗi dòng có nút chuyển sang công ty đó"
+        class="overflow-hidden rounded-xl border border-line bg-surface shadow-[0_20px_50px_-20px_rgb(71_49_31/0.35)]">
+        <div class="flex items-center gap-1.5 border-b border-line bg-canvas px-3 py-2" aria-hidden="true">
+          <span class="h-2.5 w-2.5 rounded-full bg-[#e7ded6] dark:bg-[#3a2f27]"></span>
+          <span class="h-2.5 w-2.5 rounded-full bg-[#e7ded6] dark:bg-[#3a2f27]"></span>
+          <span class="h-2.5 w-2.5 rounded-full bg-[#e7ded6] dark:bg-[#3a2f27]"></span>
+          <span class="ml-3 truncate rounded bg-surface px-2 py-0.5 text-[11px] text-muted">kt.flexa.vn</span>
+        </div>
+        <div class="p-4 sm:p-5" aria-hidden="true">
+          <div class="flex items-baseline justify-between gap-3">
+            <p class="font-bold text-ink">Công ty của tôi</p>
+            <p class="text-xs text-muted">24 công ty</p>
+          </div>
+          <div class="mt-3 flex items-center gap-2 rounded-lg border border-line bg-canvas px-3 py-2 text-sm text-muted">
+            <svg viewBox="0 0 24 24" class="h-4 w-4 flex-none" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5" /><path d="M16 16l4 4" /></svg>
+            Tìm theo tên hoặc mã số thuế
+          </div>
+          <ul class="mt-3 divide-y divide-line rounded-lg border border-line">
+            {demoCompanies.map((c) => (
+              <li class={`flex items-center gap-3 px-3 py-2.5 ${c.active ? 'bg-brand-50 dark:bg-brand-700/20' : ''}`}>
+                <div class="min-w-0 flex-1">
+                  <p class="truncate text-sm font-semibold text-ink">{c.name}</p>
+                  <p class="truncate text-xs text-muted">MST {c.tax} · {c.role}</p>
+                </div>
+                {c.active
+                  ? <span class="flex-none rounded-full bg-brand-500 px-2 py-0.5 text-[11px] font-semibold text-white">Đang làm việc</span>
+                  : <span class="flex-none rounded-md border border-line px-2 py-1 text-[11px] font-medium text-ink-soft">Chuyển sang</span>}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </figure>
+    </div>
   </Section>
 
   <!-- Trợ lý AI -->
@@ -242,8 +314,24 @@ const migrate = [
     <div class="mt-6"><Offers /></div>
   </Section>
 
+  <!-- Dịch vụ theo yêu cầu -->
+  <Section id="dich-vu" eyebrow="Dịch vụ" title="Cần làm khác đi? Chúng tôi làm theo yêu cầu" lead="Chỉnh mẫu và cách tính theo công ty bạn, thêm chức năng riêng, nối với phần mềm đang dùng. Khảo sát và báo giá miễn phí.">
+    <div class="grid gap-5 md:grid-cols-3">
+      {SERVICES.map((s, i) => (
+        <a href={`/dich-vu#${s.id}`} data-reveal style={`--d:${i * 120}ms`} class="lift group rounded-2xl border border-line bg-surface p-6">
+          <p class="font-semibold text-ink">{s.title}</p>
+          <p class="mt-1.5 text-sm leading-relaxed text-ink-soft">{s.lead}</p>
+          <ul class="mt-4 space-y-1.5 text-sm text-ink-soft">
+            {s.items.map((it) => <li class="flex gap-2"><span class="text-accent">✓</span>{it.t}</li>)}
+          </ul>
+          <p class="mt-5 text-sm font-semibold text-brand-600 group-hover:underline">Xem chi tiết →</p>
+        </a>
+      ))}
+    </div>
+  </Section>
+
   <!-- Chuyển dữ liệu -->
-  <Section eyebrow="Chuyển sang FlexaBooks" title="Đang dùng phần mềm khác?" lead="Mang số dư và sổ nhật ký chung sang, không phải nhập lại từ đầu năm.">
+  <Section eyebrow="Chuyển sang FlexaBooks" title="Đang dùng phần mềm khác?" lead="Mang số dư và sổ nhật ký chung sang, không phải nhập lại từ đầu năm." class="bg-surface">
     <ol class="grid gap-5 md:grid-cols-3">
       {migrate.map((m, i) => (
         <li data-reveal style={`--d:${i * 120}ms`} class="lift rounded-2xl border border-line bg-surface p-6">

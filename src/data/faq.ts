@@ -43,7 +43,11 @@ export const FAQ = [
   },
   {
     q: 'Tôi làm kế toán dịch vụ cho nhiều công ty thì tính giá thế nào?',
-    a: 'Một tài khoản đăng nhập dùng được cho mọi công ty bạn giữ sổ. Từ 3 công ty trở lên có giá riêng: 700.000đ mỗi công ty một năm, từ 10 công ty là 600.000đ, từ 20 công ty là 500.000đ, mỗi công ty đủ tính năng gói Doanh nghiệp. Chi tiết ở mục Kế toán dịch vụ của trang Bảng giá.',
+    a: 'Một tài khoản đăng nhập dùng được cho mọi công ty bạn giữ sổ. Trang Công ty của tôi liệt kê các công ty, tìm được theo tên hoặc mã số thuế, bấm một lần là chuyển sang công ty khác. Từ 3 công ty trở lên có giá riêng: 700.000đ mỗi công ty một năm, từ 10 công ty là 600.000đ, từ 20 công ty là 500.000đ, mỗi công ty đủ tính năng gói Doanh nghiệp. Chi tiết ở mục Kế toán dịch vụ của trang Bảng giá.',
+  },
+  {
+    q: 'Công ty tôi có mẫu chứng từ, báo cáo riêng, hoặc cần nối với phần mềm đang dùng thì sao?',
+    a: 'Chúng tôi nhận chỉnh mẫu chứng từ, mẫu báo cáo quản trị, cách nhập liệu và cách tính theo yêu cầu, làm thêm chức năng riêng, kết nối với phần mềm bán hàng, kho, nhân sự hay ERP công ty đang dùng. Bạn gửi mẫu hoặc mô tả qua Zalo, chúng tôi khảo sát và báo giá miễn phí. Chi tiết ở trang Dịch vụ.',
   },
   {
     q: 'Hoàn tiền thế nào?',
