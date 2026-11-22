@@ -65,8 +65,8 @@ export const PLANS: Plan[] = [
   {
     id: 'chuyen-nghiep',
     name: 'Chuyên nghiệp',
-    tagline: 'Cho sản xuất, xây lắp và kế toán dịch vụ',
-    pricePerYear: 2_000_000,
+    tagline: 'Cho sản xuất, xây lắp',
+    pricePerYear: 5_000_000,
     audience: 'Doanh nghiệp TT133, TT99 có sản xuất, thi công công trình',
     users: null,
     aiTokens: 5_000_000,

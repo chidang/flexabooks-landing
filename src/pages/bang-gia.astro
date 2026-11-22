@@ -34,7 +34,7 @@ const rows: { label: string; values: string[] }[] = [
 ---
 <BaseLayout
   title="Bảng giá FlexaBooks · Từ 1.000.000đ mỗi năm"
-  description={`Ba gói năm cho một công ty: 1.000.000đ, 1.500.000đ, 2.000.000đ. Không phí khởi tạo, không giới hạn chứng từ, dùng thử ${TRIAL_DAYS} ngày đủ tính năng.`}
+  description={`Ba gói năm cho một công ty: ${PLANS.map((p) => formatVnd(p.pricePerYear)).join(", ")}. Không phí khởi tạo, không giới hạn chứng từ, dùng thử ${TRIAL_DAYS} ngày đủ tính năng.`}
   jsonLd={[softwareJsonLd(site), faqJsonLd()]}
 >
   <Section eyebrow="Bảng giá" title="Giá năm, cho một công ty" lead={`Dùng thử ${TRIAL_DAYS} ngày đủ tính năng rồi mới chọn gói. Giá chưa gồm thuế GTGT. Không phí khởi tạo, không giới hạn số chứng từ.`}>
