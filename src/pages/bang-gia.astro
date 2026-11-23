@@ -33,7 +33,7 @@ const rows: { label: string; values: string[] }[] = [
 ];
 ---
 <BaseLayout
-  title="Bảng giá FlexaBooks · Từ 1.000.000đ mỗi năm"
+  title={`Bảng giá FlexaBooks · Từ ${formatVnd(Math.min(...PLANS.map((p) => p.pricePerYear)))} mỗi năm`}
   description={`Ba gói năm cho một công ty: ${PLANS.map((p) => formatVnd(p.pricePerYear)).join(", ")}. Không phí khởi tạo, không giới hạn chứng từ, dùng thử ${TRIAL_DAYS} ngày đủ tính năng.`}
   jsonLd={[softwareJsonLd(site), faqJsonLd()]}
 >

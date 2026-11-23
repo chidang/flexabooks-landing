@@ -31,7 +31,7 @@ export const PLANS: Plan[] = [
     id: 'ho-sieu-nho',
     name: 'Hộ & Siêu nhỏ',
     tagline: 'Cho hộ, cá nhân kinh doanh và doanh nghiệp siêu nhỏ',
-    pricePerYear: 1_000_000,
+    pricePerYear: 990_000,
     audience: 'Hộ, cá nhân kinh doanh (Thông tư 152/2025); doanh nghiệp siêu nhỏ (Thông tư 58/2026)',
     users: 3,
     aiTokens: 1_000_000,
@@ -48,7 +48,7 @@ export const PLANS: Plan[] = [
     id: 'doanh-nghiep',
     name: 'Doanh nghiệp',
     tagline: 'Đủ phân hệ cho doanh nghiệp nhỏ và vừa',
-    pricePerYear: 1_500_000,
+    pricePerYear: 1_990_000,
     featured: true,
     audience: 'Doanh nghiệp theo Thông tư 133/2016 hoặc Thông tư 99/2025',
     users: 10,
@@ -66,7 +66,7 @@ export const PLANS: Plan[] = [
     id: 'chuyen-nghiep',
     name: 'Chuyên nghiệp',
     tagline: 'Cho sản xuất, xây lắp',
-    pricePerYear: 5_000_000,
+    pricePerYear: 4_990_000,
     audience: 'Doanh nghiệp TT133, TT99 có sản xuất, thi công công trình',
     users: null,
     aiTokens: 5_000_000,
@@ -107,9 +107,9 @@ export const REFERRAL_MONTHS = 2;
 // cần gói Chuyên nghiệp thì giảm `proPercent` trên giá gói đó.
 export const SERVICE_FIRM = { fromCompany: 3, proPercent: 20 };
 export const SERVICE_FIRM_TIERS = [
-  { from: 3, to: 9, pricePerYear: 700_000 },
-  { from: 10, to: 19, pricePerYear: 600_000 },
-  { from: 20, to: null, pricePerYear: 500_000 },
+  { from: 3, to: 9, pricePerYear: 890_000 },
+  { from: 10, to: 19, pricePerYear: 790_000 },
+  { from: 20, to: null, pricePerYear: 690_000 },
 ] as const;
 export const REFUND_DAYS = 30;
 

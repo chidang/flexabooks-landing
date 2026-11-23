@@ -5,7 +5,7 @@ import Section from '../components/Section.astro';
 import PricingCards from '../components/PricingCards.astro';
 import Offers from '../components/Offers.astro';
 import Faq from '../components/Faq.astro';
-import { ALL_PLANS_INCLUDE, TRIAL_DAYS, PLANS, formatVnd } from '../data/pricing';
+import { ALL_PLANS_INCLUDE, TRIAL_DAYS, PLANS, SERVICE_FIRM, SERVICE_FIRM_TIERS, formatVnd } from '../data/pricing';
 import { DOCS_URL, registerUrl } from '../lib/contact';
 import { faqJsonLd, softwareJsonLd } from '../lib/jsonld';
 import { SERVICES } from '../data/services';
@@ -47,7 +47,7 @@ const segments = [
   },
   {
     title: 'Kế toán dịch vụ',
-    body: 'Một tài khoản giữ sổ nhiều công ty. Từ 3 công ty có giá riêng, chỉ từ 500.000đ mỗi công ty một năm.',
+    body: `Một tài khoản giữ sổ nhiều công ty. Từ ${SERVICE_FIRM.fromCompany} công ty có giá riêng, chỉ từ ${formatVnd(SERVICE_FIRM_TIERS[SERVICE_FIRM_TIERS.length - 1].pricePerYear)} mỗi công ty một năm.`,
     plan: 'ke-toan-dich-vu', planName: 'Kế toán dịch vụ',
   },
 ];

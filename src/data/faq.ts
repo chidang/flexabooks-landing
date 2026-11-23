@@ -1,4 +1,4 @@
-import { EARLY_BIRD, REFUND_DAYS, TRIAL_DAYS } from './pricing';
+import { EARLY_BIRD, REFUND_DAYS, SERVICE_FIRM_TIERS, TRIAL_DAYS, formatVnd } from './pricing';
 
 export const FAQ = [
   {
@@ -47,7 +47,7 @@ export const FAQ = [
   },
   {
     q: 'Tôi làm kế toán dịch vụ cho nhiều công ty thì tính giá thế nào?',
-    a: 'Một tài khoản đăng nhập dùng được cho mọi công ty bạn giữ sổ. Trang Công ty của tôi liệt kê các công ty, tìm được theo tên hoặc mã số thuế, bấm một lần là chuyển sang công ty khác. Từ 3 công ty trở lên có giá riêng: 700.000đ mỗi công ty một năm, từ 10 công ty là 600.000đ, từ 20 công ty là 500.000đ, mỗi công ty đủ tính năng gói Doanh nghiệp. Chi tiết ở mục Kế toán dịch vụ của trang Bảng giá.',
+    a: `Một tài khoản đăng nhập dùng được cho mọi công ty bạn giữ sổ. Trang Công ty của tôi liệt kê các công ty, tìm được theo tên hoặc mã số thuế, bấm một lần là chuyển sang công ty khác. Từ ${SERVICE_FIRM_TIERS[0].from} công ty trở lên có giá riêng: ${formatVnd(SERVICE_FIRM_TIERS[0].pricePerYear)} mỗi công ty một năm, từ ${SERVICE_FIRM_TIERS[1].from} công ty là ${formatVnd(SERVICE_FIRM_TIERS[1].pricePerYear)}, từ ${SERVICE_FIRM_TIERS[2].from} công ty là ${formatVnd(SERVICE_FIRM_TIERS[2].pricePerYear)}, mỗi công ty đủ tính năng gói Doanh nghiệp. Chi tiết ở mục Kế toán dịch vụ của trang Bảng giá.`,
   },
   {
     q: 'Công ty tôi có mẫu chứng từ, báo cáo riêng, hoặc cần nối với phần mềm đang dùng thì sao?',
