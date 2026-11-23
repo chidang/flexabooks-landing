@@ -19,6 +19,7 @@ import soMau from '../assets/screens/so-mau.png';
 import hoKinhDoanh from '../assets/screens/ho-kinh-doanh.png';
 import raSoat from '../assets/screens/ra-soat.png';
 import troLy from '../assets/screens/tro-ly-ai.png';
+import aiLapNhap from '../assets/screens/ai-lap-nhap.png';
 
 const site = Astro.site!;
 const cheapest = formatVnd(Math.min(...PLANS.map((p) => p.pricePerYear)));
@@ -328,6 +329,9 @@ const migrate = [
         <li class="flex gap-2"><span class="text-accent">✓</span>Hoàn tác cả lần chạy khi chứng từ còn là nháp</li>
         <li class="flex gap-2"><span class="text-accent">✓</span>Dòng còn lại để cho người, kèm lý do vì sao trợ lý chưa làm</li>
       </ul>
+      <div data-reveal="zoom" class="mx-auto mt-8 max-w-4xl">
+        <BrowserFrame src={aiLapNhap} alt="Màn Chứng từ AI lập nháp: lần chạy sau khi nhập sao kê, bốn chứng từ nháp lập theo quy tắc chờ kế toán ghi sổ, nút hoàn tác lần chạy" />
+      </div>
     </div>
   </Section>
 
