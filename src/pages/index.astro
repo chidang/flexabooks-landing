@@ -55,13 +55,13 @@ const features = [
   {
     img: saoKe, alt: 'Màn chuyển sao kê ngân hàng sang tệp nhập',
     title: 'Tiền mặt, ngân hàng, công nợ',
-    body: 'Lập phiếu thu, phiếu chi, ủy nhiệm chi. Tải sao kê Excel hay CSV của ngân hàng lên, phần mềm nhận ra cột ngày, cột tiền rồi cho xem trước khi nhập. Đối trừ chứng từ, theo dõi nợ quá hạn theo từng khách hàng, nhà cung cấp.',
+    body: 'Lập phiếu thu, phiếu chi, ủy nhiệm chi. Tải sao kê Excel hay CSV của ngân hàng lên, phần mềm nhận ra cột ngày, cột tiền rồi cho xem trước khi nhập. Đối trừ chứng từ, theo dõi nợ quá hạn theo từng khách hàng, nhà cung cấp. Trợ lý AI lập sẵn chứng từ nháp cho dòng sao kê và gắn phiếu đã lập từ trước.',
     points: ['Nhập sao kê theo khuôn của từng ngân hàng', 'Kiểm kê quỹ, cả quỹ ngoại tệ', 'Tuổi nợ, hạn thanh toán'],
   },
   {
     img: hoaDon, alt: 'Danh sách hóa đơn mua vào với nút nhập XML và đọc từ PDF',
     title: 'Hóa đơn điện tử',
-    body: 'Nhập hóa đơn từ tệp XML, hoặc thả tệp PDF, ảnh chụp để Trợ lý AI đọc và điền sẵn form. Từ hóa đơn tạo chứng từ hạch toán nháp, bạn xem lại rồi ghi sổ.',
+    body: 'Nhập hóa đơn từ tệp XML, hoặc thả tệp PDF, ảnh chụp để Trợ lý AI đọc và điền sẵn form. Từ hóa đơn tạo chứng từ hạch toán nháp, bạn xem lại rồi ghi sổ. Nhập XML hóa đơn mua dịch vụ xong, trợ lý có thể lập nháp cả lô theo cách hạch toán quen của từng nhà cung cấp.',
     points: ['Nhập XML hàng loạt', 'Đọc hóa đơn PDF, ảnh', 'Hóa đơn ngoại tệ đúng tỷ giá'],
   },
   {
@@ -85,7 +85,7 @@ const features = [
   {
     img: raSoat, alt: 'Danh sách lỗi của lần rà soát số liệu',
     title: 'Rà soát số liệu của kế toán cũ',
-    body: 'Nhận sổ từ người khác? Phần mềm quét sổ, chỉ ra bước cuối kỳ chưa làm, dòng thiếu đối tượng, số dư bất thường, rồi gợi ý cách sửa theo đúng năm phát sinh sai sót.',
+    body: 'Nhận sổ từ người khác? Phần mềm quét sổ, chỉ ra bước cuối kỳ chưa làm, dòng thiếu đối tượng, số dư bất thường, rồi gợi ý cách sửa theo đúng năm phát sinh sai sót. Trợ lý AI ghi chú thêm cho từng bước sửa và tóm tắt biên bản.',
     points: ['Chạy không cần AI', 'Biên bản rà soát in được', 'Nhập sổ nhật ký chung từ phần mềm khác'],
   },
 ];
@@ -113,9 +113,18 @@ const demoCompanies = [
 
 const aiPoints = [
   { t: 'Hỏi số liệu bằng lời', b: 'Lãi lỗ tháng này bao nhiêu, khách nào đang nợ quá hạn. Câu trả lời kèm link tới đúng báo cáo để bạn đối chiếu.' },
-  { t: 'Gợi ý định khoản', b: 'Tả nghiệp vụ, trợ lý đề xuất bút toán và mở form chứng từ điền sẵn.' },
+  { t: 'Gợi ý định khoản', b: 'Tả nghiệp vụ, trợ lý đề xuất bút toán và mở form chứng từ điền sẵn. Hỏi cách dùng phần mềm, trợ lý trả lời theo trang hướng dẫn sử dụng.' },
   { t: 'Đọc hóa đơn, sao kê', b: 'Đọc hóa đơn PDF, ảnh; nhận ra cột của tệp sao kê lạ. Số tiền luôn đọc thẳng từ tệp.' },
   { t: 'Kiểm tra sổ định kỳ', b: 'Đầu tháng, trợ lý tóm tắt những chỗ cần xem lại của tháng trước.' },
+  { t: 'Biết cách làm của công ty bạn', b: 'Viết cho trợ lý một bài giới thiệu công ty, những điều không được làm, các ghi nhớ và cách hạch toán riêng. Trợ lý đọc trước khi trả lời.' },
+];
+
+// Việc giao: trợ lý tự chạy sau mỗi lần nhập, chỉ lập nháp, gắn, đối trừ; ghi sổ vẫn là người bấm.
+const aiTasks = [
+  { t: 'Lập nháp từ sao kê', b: 'Nhập sao kê xong, trợ lý lập chứng từ nháp cho những dòng đủ chắc chắn: theo quy tắc trước, theo cách công ty đã hạch toán các tháng trước, dòng khó mới hỏi mô hình.' },
+  { t: 'Lập nháp hóa đơn mua dịch vụ', b: 'Hóa đơn mua dịch vụ chưa hạch toán được lập nháp theo lịch sử của từng nhà cung cấp. Công ty tự đặt số tiền tối đa và mức chắc chắn tối thiểu.' },
+  { t: 'Gắn phiếu đã lập từ trước', b: 'Dòng sao kê mà bạn đã có phiếu thu, phiếu chi hay ủy nhiệm chi thì trợ lý gắn vào, không lập trùng. Có hai phiếu giống nhau thì để bạn chọn.' },
+  { t: 'Đối trừ công nợ', b: 'Đối trừ tiền thu, tiền trả với đúng hóa đơn khi chỉ có một cách khớp. Chia theo khoản cũ trước và đối trừ ngoại tệ luôn chỉ là đề xuất chờ bạn duyệt.' },
 ];
 
 const migrate = [
@@ -144,7 +153,7 @@ const migrate = [
         </h1>
         <p class="mt-5 text-lg leading-relaxed text-ink-soft">
           Sổ sách, báo cáo tài chính, tờ khai thuế theo Thông tư 133, 99, 58 và 152. Mở trình duyệt là dùng được,
-          có Trợ lý AI đọc hóa đơn và trả lời về số liệu của công ty.
+          có Trợ lý AI đọc hóa đơn, lập sẵn chứng từ nháp từ sao kê và trả lời về số liệu của công ty.
         </p>
         <div class="mt-8 flex flex-col gap-3 sm:flex-row">
           <a href={registerUrl('trial', 'hero')} data-cta="hero"
@@ -298,6 +307,27 @@ const migrate = [
         <BrowserFrame src={troLy} alt="Bảng Trợ lý AI mở cạnh form hóa đơn, có ô thả tệp PDF để đọc hóa đơn" />
         <p class="mt-3 text-center text-sm text-muted">Mỗi gói tặng sẵn hạn mức token hằng tháng. Hết hạn mức thì phần mềm kế toán vẫn chạy đủ.</p>
       </div>
+    </div>
+
+    <div data-reveal class="mt-14 rounded-2xl border border-line bg-surface p-6 sm:p-8">
+      <h3 class="text-xl font-bold text-ink">Giao việc cho trợ lý, bạn chỉ việc duyệt</h3>
+      <p class="mt-2 max-w-3xl text-sm leading-relaxed text-ink-soft">
+        Kế toán trưởng bật từng việc và đặt ngưỡng. Mỗi lần nhập sao kê hay hóa đơn, trợ lý tự chạy với đúng quyền của
+        người giao việc, xong thì báo trên nút Hỏi AI.
+      </p>
+      <ul class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {aiTasks.map((a, i) => (
+          <li data-reveal style={`--d:${i * 90}ms`} class="lift rounded-xl border border-line bg-canvas p-5">
+            <p class="font-semibold text-ink">{a.t}</p>
+            <p class="mt-1.5 text-sm leading-relaxed text-ink-soft">{a.b}</p>
+          </li>
+        ))}
+      </ul>
+      <ul class="mt-6 grid gap-x-6 gap-y-2 text-sm text-ink-soft md:grid-cols-3">
+        <li class="flex gap-2"><span class="text-accent">✓</span>Trợ lý không ghi sổ: bạn ghi sổ hoặc trả lại cả lô trên một hàng đợi</li>
+        <li class="flex gap-2"><span class="text-accent">✓</span>Hoàn tác cả lần chạy khi chứng từ còn là nháp</li>
+        <li class="flex gap-2"><span class="text-accent">✓</span>Dòng còn lại để cho người, kèm lý do vì sao trợ lý chưa làm</li>
+      </ul>
     </div>
   </Section>
 

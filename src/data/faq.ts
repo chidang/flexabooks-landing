@@ -23,7 +23,11 @@ export const FAQ = [
   },
   {
     q: 'Trợ lý AI làm được gì, có tự ghi sổ không?',
-    a: 'Trợ lý trả lời câu hỏi về số liệu của công ty, gợi ý định khoản, đọc hóa đơn PDF hay ảnh để điền form, ghép cột sao kê và chỉ ra chỗ sổ có thể sai. Trợ lý không tự ghi sổ: bút toán đề xuất mở ra form chứng từ để bạn kiểm tra và tự bấm lưu.',
+    a: 'Trợ lý trả lời câu hỏi về số liệu của công ty và cách dùng phần mềm, gợi ý định khoản, đọc hóa đơn PDF hay ảnh để điền form, ghép cột sao kê và chỉ ra chỗ sổ có thể sai. Khi được giao việc, trợ lý lập chứng từ nháp cho dòng sao kê, hóa đơn mua dịch vụ, gắn phiếu đã có vào dòng sao kê và đối trừ công nợ. Trợ lý không tự ghi sổ: bạn kiểm tra rồi tự bấm ghi sổ.',
+  },
+  {
+    q: 'Giao việc cho trợ lý thì kiểm soát thế nào?',
+    a: 'Kế toán trưởng bật từng việc, đặt số tiền tối đa và mức chắc chắn tối thiểu. Trợ lý chạy với đúng quyền của người giao việc, không vào kỳ đã khóa sổ. Chứng từ trợ lý lập nằm trên một hàng đợi riêng: bạn ghi sổ, trả lại theo lô, hoặc hoàn tác cả lần chạy khi chứng từ còn là nháp. Phần lớn dòng được quyết theo quy tắc và lịch sử hạch toán của công ty, chỉ dòng khó mới gọi mô hình và tính vào hạn mức token.',
   },
   {
     q: 'Hạn mức token của Trợ lý AI tính thế nào?',
