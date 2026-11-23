@@ -27,7 +27,7 @@ export const FAQ = [
   },
   {
     q: 'Giao việc cho trợ lý thì kiểm soát thế nào?',
-    a: 'Kế toán trưởng bật từng việc, đặt số tiền tối đa và mức chắc chắn tối thiểu. Trợ lý chạy với đúng quyền của người giao việc, không vào kỳ đã khóa sổ. Chứng từ trợ lý lập nằm trên một hàng đợi riêng: bạn ghi sổ, trả lại theo lô, hoặc hoàn tác cả lần chạy khi chứng từ còn là nháp. Phần lớn dòng được quyết theo quy tắc và lịch sử hạch toán của công ty, chỉ dòng khó mới gọi mô hình và tính vào hạn mức token.',
+    a: 'Người quản trị hoặc kế toán trưởng bật từng việc, đặt số tiền tối đa và mức chắc chắn tối thiểu. Trợ lý chạy với đúng quyền của người giao việc, không vào kỳ đã khóa sổ. Chứng từ trợ lý lập nằm trên một hàng đợi riêng: bạn ghi sổ, trả lại theo lô, hoặc hoàn tác cả lần chạy khi chứng từ còn là nháp. Phần lớn dòng được quyết theo quy tắc và lịch sử hạch toán của công ty, chỉ dòng khó mới gọi mô hình và tính vào hạn mức token.',
   },
   {
     q: 'Hạn mức token của Trợ lý AI tính thế nào?',
