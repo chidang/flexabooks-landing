@@ -11,6 +11,6 @@ export const ZALO_CHAT_URL = `https://zalo.me/${SUPPORT_PHONE}`;
 
 /** Link đăng ký kèm gói và nguồn, để đo lượt bấm theo từng nút. App bỏ qua tham số lạ. */
 export function registerUrl(plan: string = 'trial', placement: string = 'landing'): string {
-  const params = new URLSearchParams({ plan, utm_source: 'flexabooks.vn', utm_medium: 'landing', utm_campaign: placement });
+  const params = new URLSearchParams({ plan, utm_source: 'flexabooks.com', utm_medium: 'landing', utm_campaign: placement });
   return `${APP_URL}/register?${params.toString()}`;
 }

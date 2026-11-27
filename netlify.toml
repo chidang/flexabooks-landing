@@ -4,3 +4,16 @@
 
 [build.environment]
   NODE_VERSION = "24"
+
+# Tên miền cũ chuyển vĩnh viễn sang tên miền chính, giữ đường dẫn và tham số.
+[[redirects]]
+  from = "https://books.flexa.vn/*"
+  to = "https://flexabooks.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://books.flexa.vn/*"
+  to = "https://flexabooks.com/:splat"
+  status = 301
+  force = true
