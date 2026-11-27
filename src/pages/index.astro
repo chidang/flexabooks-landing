@@ -5,6 +5,7 @@ import Section from '../components/Section.astro';
 import PricingCards from '../components/PricingCards.astro';
 import Offers from '../components/Offers.astro';
 import Faq from '../components/Faq.astro';
+import VideoIntro from '../components/VideoIntro.astro';
 import { ALL_PLANS_INCLUDE, TRIAL_DAYS, PLANS, SERVICE_FIRM, SERVICE_FIRM_TIERS, formatVnd } from '../data/pricing';
 import { DOCS_URL, registerUrl } from '../lib/contact';
 import { faqJsonLd, softwareJsonLd } from '../lib/jsonld';
@@ -20,6 +21,7 @@ import hoKinhDoanh from '../assets/screens/ho-kinh-doanh.png';
 import raSoat from '../assets/screens/ra-soat.png';
 import troLy from '../assets/screens/tro-ly-ai.png';
 import aiLapNhap from '../assets/screens/ai-lap-nhap.png';
+import videoPoster from '../assets/video/gioi-thieu.jpg';
 
 const site = Astro.site!;
 const cheapest = formatVnd(Math.min(...PLANS.map((p) => p.pricePerYear)));
@@ -182,6 +184,13 @@ const migrate = [
       ))}
     </ul>
   </section>
+
+  <!-- Video giới thiệu -->
+  <Section id="video" eyebrow="Video" title="Xem FlexaBooks trong 2 phút" lead="Trợ lý AI đọc hóa đơn, ghép cột sao kê, lập chứng từ nháp và trả lời câu hỏi về số liệu. Người ghi sổ vẫn là kế toán.">
+    <div data-reveal="zoom" class="mx-auto max-w-4xl">
+      <VideoIntro id="Um53YVgebdI" title="FlexaBooks: Phần mềm kế toán có trợ lý AI cho doanh nghiệp nhỏ" poster={videoPoster} duration="1:41" />
+    </div>
+  </Section>
 
   <!-- Chọn theo loại hình -->
   <Section eyebrow="Bạn là ai" title="Một phần mềm, bốn cách dùng" lead="Chọn đúng loại hình để thấy đúng sổ, đúng mẫu báo cáo ngay từ ngày đầu.">
